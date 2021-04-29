@@ -1,0 +1,15 @@
+{% extends 'blog_app/base.html' %}
+
+{% block content %}
+
+<div>
+    <h1>{{ post.title }}</h1>
+</div>
+
+<div>
+    <p>{{ post.content }}</p>
+</div>
+
+<h4>Posted by {{ post.author }} on {{ post.datetime }}</h4>
+
+{% endblock %}

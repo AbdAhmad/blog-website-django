@@ -1,0 +1,25 @@
+{% extends 'blog_app/base.html' %}
+
+{% block content %}
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}    
+    {% for post in posts %}
+    <div>
+        <h2>{{ post.title }}</h2>
+        
+        <a href="{% url 'read_post' post.id %}"><button>Read blog</button></a>
+
+        
+        <h4>Posted by {{ post.author }}</h4>
+        <h4>Published at {{ post.created_at }}</h4>
+        <h4>Last Modified at {{ post.updated_at }}</h4>
+        <br>
+    </div>
+    {% endfor %}
+
+{% endblock %}

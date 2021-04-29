@@ -1,0 +1,35 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<link rel="stylesheet" href="{% static 'css/base.css' %}">
+<link rel="stylesheet" href="{% static 'css/posts.css' %}">
+
+<nav>
+    <ul>    
+        {% if request.user.is_authenticated %}
+        <li class="blogs"><a class="nav_a" href="{% url 'posts' %}">Blogs</a></li>
+        <li class="post"><a class="nav_a" href="{% url 'post' %}">Post</a></li>
+        <li class="my_posts"><a class="nav_a" href="{% url 'myposts' %}">My Posts</a></li>
+        <li><a class="nav_a" href="{% url 'logout' %}">Logout</a></li>
+        <li><a class="nav_a" href="{% url 'profile' %}"><img class="icon" height="25px" width="25px" src="{{ user.profile.image.url }}"> Welcome {{ request.user }}</a></li>
+        {% else %}
+        <li><a class="nav_a" href="{% url 'signup' %}">Signup</a></li>
+        <li><a class="nav_a" href="{% url 'login' %}">Login</a></li>
+        {% endif %}
+    </ul>
+</nav>
+<br>
+
+<body>
+    {% block content %}
+    {% endblock %}
+</body>
+</html>

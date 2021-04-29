@@ -1,0 +1,10 @@
+{% extends 'blog_app/base.html' %}
+
+{% block content %}
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ form }}
+        <button type="submit">Login</button>
+    </form>
+    <a href="{% url 'signup' %}"><button>Create account</button></a>
+{% endblock %}

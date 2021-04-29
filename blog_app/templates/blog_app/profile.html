@@ -1,0 +1,15 @@
+{% extends 'blog_app/base.html' %}
+
+{% block content %}
+    <div>
+        <img height="200px" width="200px" src="{{ user.profile.image.url }}"> 
+        <h1 class="posts">{{ user.username }}</h1>  
+        <br>
+        <h4>{{ profile.location }}</h4>
+        <br>
+        <h4>{{ user.profile.bio }}</h4>
+        <br>
+        <a href="{% url 'myposts' %}"><button>Your Blogs : {{ posts_count }}</button></a>
+        <a href="{% url 'edit_profile' user.profile.id %}"><button>Edit Profile</button></a>
+    </div>
+{% endblock %}
