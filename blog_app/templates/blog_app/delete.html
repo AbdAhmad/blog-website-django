@@ -1,11 +1,31 @@
 {% extends 'blog_app/base.html' %}
 
 {% block content %}
-<h1>Delete {{ post.title }}?</h1>
-<form action="{% url 'delete_post' post.id %}" method="POST">
-
-    {% csrf_token %}
-    <button type="submit">Delete</button>
-    <a href="{% url 'myposts' %}"><button>Cancel</button></a>
-</form>
+<div class="container">
+    <div class="row">
+        <div class="col-md-4 offset-md-4">
+            <div class="card">
+                <form method="post">
+                    {% csrf_token %}
+                <div class="card-header text-white bg-dark">
+                    <div class="card-title">
+                        <h3>Delete {{ post.title }}?</h3>
+                    </div>
+                </div>
+                <div class="card-body">       
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-danger" type="submit">Delete</button>
+                    </div> 
+                    <br>
+                    <form action="{% url 'myposts' %}">
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-primary">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div> 
 {% endblock %}

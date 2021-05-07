@@ -7,24 +7,26 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
 </head>
 
-<link rel="stylesheet" href="{% static 'css/base.css' %}">
-<link rel="stylesheet" href="{% static 'css/posts.css' %}">
-
-<nav>
-    <ul>    
-        {% if request.user.is_authenticated %}
-        <li class="blogs"><a class="nav_a" href="{% url 'posts' %}">Blogs</a></li>
-        <li class="post"><a class="nav_a" href="{% url 'post' %}">Post</a></li>
-        <li class="my_posts"><a class="nav_a" href="{% url 'myposts' %}">My Posts</a></li>
-        <li><a class="nav_a" href="{% url 'logout' %}">Logout</a></li>
-        <li><a class="nav_a" href="{% url 'profile' %}"><img class="icon" height="25px" width="25px" src="{{ user.profile.image.url }}"> Welcome {{ request.user }}</a></li>
-        {% else %}
-        <li><a class="nav_a" href="{% url 'signup' %}">Signup</a></li>
-        <li><a class="nav_a" href="{% url 'login' %}">Login</a></li>
-        {% endif %}
-    </ul>
+<nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+      {% if request.user.is_authenticated %}
+          <a class="navbar-brand text-white" href="{% url 'posts' %}">Blogs</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+          <a class="nav-link text-white" href="{% url 'post' %}">Post</a>
+          <a class="nav-link text-white" href="{% url 'my_posts' %}">My Posts</a>
+          <a class="nav-link text-white" href="{% url 'logout' %}">Logout</a>
+          <a class="nav-link text-white" href="{% url 'profile' %}" tabindex="-1" aria-disabled="true">Welcome {{ request.user.first_name }}</a>
+      {% endif %}
+        </div>
+      </div>
+    </div>
 </nav>
 <br>
 
@@ -33,3 +35,22 @@
     {% endblock %}
 </body>
 </html>
+
+<style>
+  body{
+    background-image: url({% static 'bg_image.jpg' %});
+    background-size: cover;
+    background-position: bottom;
+        background-repeat: repeat;
+        height: 50vh;
+        width: 100%;
+  }
+
+  .top_margin{
+    margin-top: 2px;
+  }
+
+  .input_padding{
+    padding-left: 10px;
+  }
+</style>

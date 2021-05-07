@@ -1,24 +1,41 @@
 {% extends 'blog_app/base.html' %}
 
 {% block content %}
-    <div>
-        <form method="post">
-            {% if messages %}
-            <ul class="messages">
-                {% for message in messages %}
-                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-                {% endfor %}
-            </ul>
-            {% endif %}
-            {% csrf_token %}
-            <h2>Title</h2>
-            {{ post.title }}
-            <br>
-            <h2>Content</h2>
-            {{ post.content }}
-            <br>
-            
-            <button type="submit">Post</button>
-        </form>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 offset-md-4">
+                <div class="card">
+                    {% if messages %}
+                    <ul class="messages">
+                        {% for message in messages %}
+                        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                    <form method="post">
+                        {% csrf_token %}
+                    <div class="card-header text-white bg-dark">
+                        <div class="card-title">
+                            Title
+                        </div>
+                    </div>
+                    <div class="card-body">        
+                            {{ post.title }}
+                    </div>
+                    <div class="card-header text-white bg-dark">
+                        <div class="card-title">
+                            Content
+                        </div>
+                    </div>
+                    <div class="card-body">        
+                            {{ post.content }}   
+                    </div>
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-primary" type="submit">Post</button> 
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div> 
 {% endblock %}

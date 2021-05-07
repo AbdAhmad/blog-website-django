@@ -1,14 +1,43 @@
 {% extends 'blog_app/base.html' %}
 
 {% block content %}
-<div>
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        <h1>{{ profile.user }}</h1>
-        <br>
-        {{ form.as_p }}
-        <br>
-        <button type="submit">Update Profile</button>
-    </form>
+<div class="container">
+    <div class="row">
+        <div class="col-md-4 offset-md-4">
+            <div class="card">
+                <div class="card-header bg-dark">
+                    <div class="card-title text-white">
+                        <h6>Edit Profile</h6>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="card-header text-white bg-dark">
+                            <div class="card-title">
+                                Location
+                            </div>
+                        </div>
+                        <div class="card-body">        
+                                {{ form.location }}
+                        </div>
+                        <div class="card-header text-white bg-dark">
+                            <div class="card-title">
+                                Content
+                            </div>
+                        </div>
+                        <div class="card-body">        
+                                {{ form.bio }}   
+                        </div>
+                        <br>
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-primary" type="submit">Update Profile</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
+

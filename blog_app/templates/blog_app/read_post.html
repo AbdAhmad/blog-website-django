@@ -2,14 +2,28 @@
 
 {% block content %}
 
-<div>
-    <h1>{{ post.title }}</h1>
-</div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card"> 
+                <div class="card-header">
+                    <div class="card-title">
+                        <h4>{{ post.title }}</h4>
+                    </div>
+                </div>
+                <div class="card-body">        
+                        {{ post.content }}
+                        <br>
+                        <br>
+                        <h6 style="float: left;">By {{ post.author }}</h6>
+                        <h6 style="float: right;">{{ post.created_at }}</h6>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div> 
 
-<div>
-    <p>{{ post.content }}</p>
-</div>
 
-<h4>Posted by {{ post.author }} on {{ post.datetime }}</h4>
 
 {% endblock %}

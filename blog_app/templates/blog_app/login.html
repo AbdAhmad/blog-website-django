@@ -1,10 +1,60 @@
 {% extends 'blog_app/base.html' %}
 
 {% block content %}
-    <form action="" method="post">
-        {% csrf_token %}
-        {{ form }}
-        <button type="submit">Login</button>
-    </form>
-    <a href="{% url 'signup' %}"><button>Create account</button></a>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 offset-md-4">
+                <div class="card">
+                    {% if messages %}
+                    <ul class="messages">
+                        {% for message in messages %}
+                        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                    <div class="card-header text-white bg-dark">
+                        <div class="card-title">
+                            Login
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <div class="col-sm-10">
+                                    <input type="text" placeholder="Username" class="form-control-plaintext input_padding" name="username">
+                                </div>
+                                <br>
+                                <div class="col-sm-10">
+                                    <input type="password" id="myInput" placeholder="Password" class="form-control-plaintext input_padding" name="password">
+                                    <input type="checkbox" onclick="passwordVisibilityToggle()"> Show Password 
+                                </div>
+                                <br>
+                            </div>
+                            <br>   
+                            <div class="d-grid gap-2">
+                                <button class="btn btn-primary" type="submit">Login</button>
+                            </div>
+                        </form>
+                        <form action="{% url 'signup' %}">
+                            <div class="d-grid gap-2 top_margin">
+                            <button class="btn btn-secondary" type="submit">Create account</button>
+                            </div> 
+                        </form>                     
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<script>
+    function passwordVisibilityToggle() {
+    let myInput = document.getElementById("myInput");
+        if (myInput.type === "password") {
+            myInput.type = "text";
+        } else {
+            myInput.type = "password";
+        }
+    }
+</script>
+ 
 {% endblock %}

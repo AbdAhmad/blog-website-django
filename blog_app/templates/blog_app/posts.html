@@ -1,24 +1,33 @@
 {% extends 'blog_app/base.html' %}
 
-{% block content %}
-    {% if messages %}
-    <ul class="messages">
-        {% for message in messages %}
-        <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-        {% endfor %}
-    </ul>
-    {% endif %}    
-    {% for post in posts %}
-    <div>
-        <h2>{{ post.title }}</h2>
-        
-        <a href="{% url 'read_post' post.id %}"><button>Read blog</button></a>
-
-        
-        <h4>Posted by {{ post.author }}</h4>
-        <h4>Published at {{ post.created_at }}</h4>
-        <h4>Last Modified at {{ post.updated_at }}</h4>
-        <br>
+{% block content %}  
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}  
+    {% for post in posts %}    
+    <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card  top_margin">
+                        <div class="card-header">
+                            <div class="card-title">
+                                <h4>{{ post.title }}</h4>
+                            </div>
+                        </div>
+                        <div class="card-body">        
+                                <a href="{% url 'read_post' post.id %}"><button class="btn btn-primary">Read blog</button></a>
+                                
+                                <h6 style="float: right;">{{ post.created_at }}</h6>
+                                <br>
+                                <a href="{% url 'author' post.author.username %}"><h6 style="float: right;">By {{ post.author }}</h6></a>                        
+                        </div>
+                    </div>
+                </div>
+            </div>
     </div>
     {% endfor %}
 

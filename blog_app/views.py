@@ -1,25 +1,68 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from .forms import SignupForm, PostForm, EditProfileForm
+from django.shortcuts import render, redirect
+from django.contrib.auth.models import User, auth
+from .forms import PostForm, EditProfileForm
 from .models import Post, Profile
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
-import os
+
 
 # Create your views here.
+
+def index(request):
+    return render(request, 'blog_app/index.html')
+
 def signup(request):
     if request.method == 'POST':
-        form = SignupForm(request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Sign up successfully')
-            return redirect('post')
+        first_name = request.POST['first_name']
+        last_name = request.POST['last_name']
+        email = request.POST['email']
+        username = request.POST['username']
+        password1 = request.POST['password1']
+        password2 = request.POST['password2']
+
+        if len(password1) < 8:
+            messages.error(request, 'Password is too short')
+            return redirect('signup')
+
+        if password1 == password2:
+            if User.objects.filter(username=username).exists():
+                messages.error(request, 'This username is already taken')
+                return redirect('signup')
+            else:
+                user = User.objects.create_user(username=username, password=password1, first_name=first_name, last_name=last_name, email=email)
+                user.save()
+                username = request.POST['username']
+                password1 = request.POST['password1']
+                user = auth.authenticate(username=username, password=password1)
+                auth.login(request, user)
+                messages.success(request, 'Signup was successful')
+                return redirect('posts')
+        else:
+            messages.error(request, "Two passwords didn't match")
+            return redirect('signup')
 
     else:
-        form = SignupForm()
-    return render(request, 'blog_app/signup.html', {'form': form})
+        return render(request, 'blog_app/signup.html')
 
 
+def login(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = auth.authenticate(username=username, password=password)
+
+        if user is not None:
+            auth.login(request, user)
+            messages.success(request, 'Welcome' + username)
+            return redirect('posts')
+        else:
+            messages.error(request, 'Wrong credentials')
+            return redirect('login')
+
+    return render(request, 'blog_app/login.html')
+
+@login_required
 def post(request):
     if request.method == 'POST':
         post = PostForm(request.POST)
@@ -33,15 +76,20 @@ def post(request):
         post = PostForm()
     return render(request, 'blog_app/post.html', {'post': post})
 
+@login_required
 def posts(request):
-    posts = Post.objects.all().order_by('created_at')
+
+    # fetching latest posts first
+    posts = Post.objects.all().order_by('-created_at')
     return render(request, 'blog_app/posts.html', {'posts': posts})
 
-def myposts(request):
+@login_required
+def my_posts(request):
     user = request.user
-    posts = Post.objects.filter(author=user)
-    return render(request, 'blog_app/myposts.html', {'posts': posts})
+    posts = Post.objects.filter(author=user).order_by('-created_at')
+    return render(request, 'blog_app/my_posts.html', {'posts': posts})
 
+@login_required
 def delete_post(request, id):
     post = Post.objects.get(id=id)
     if request.method =="POST":
@@ -50,6 +98,24 @@ def delete_post(request, id):
         return redirect("myposts")
     return render(request, 'blog_app/delete.html', {'post': post})
 
+@login_required
+def read_post(request, id):
+    post = Post.objects.get(id=id)
+    return render(request, 'blog_app/read_post.html', {'post': post})
+
+def my_post(request, id):
+    post = Post.objects.get(id=id)
+    return render(request, 'blog_app/my_post.html', {'post': post})
+
+@login_required
+def profile_page(request):
+    user = request.user
+    posts = Post.objects.filter(author=user)
+    posts_count = posts.count()
+    profile = Profile.objects.get(user=user)
+    return render(request, 'blog_app/profile.html', {'user': user, 'posts_count': posts_count, 'profile': profile})
+
+@login_required
 def edit_post(request, id):
     post = Post.objects.get(id=id)
     if request.method == 'GET':
@@ -63,32 +129,30 @@ def edit_post(request, id):
             
     return render(request, 'blog_app/post.html', {'post': post})
 
-def read_post(request, id):
-    post = Post.objects.get(id=id)
-    return render(request, 'blog_app/read_post.html', {'post': post})
-
 @login_required
-def profile_page(request):
-    user = request.user
-    posts = Post.objects.filter(author=user)
-    posts_count = posts.count()
-    profile = Profile.objects.get(user=user)
-    return render(request, 'blog_app/profile.html', {'user': user, 'posts_count': posts_count, 'profile': profile})
-
 def edit_profile(request, id):
+    user = request.user
     profile = Profile.objects.get(id=id)
-    if request.method == 'POST':
+    if request.method == 'GET':
+        form = EditProfileForm(instance=profile)
+    else:
         form = EditProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
 
             # deleting old uploaded image.
             image_path = profile.image.path
+            import os
             if os.path.exists(image_path):
                 os.remove(image_path)
 
             # the `form.save` will also update the newest image & path.
             form.save()
             return redirect('profile')
-    else:
-        form = EditProfileForm(request.POST, request.FILES, instance=profile)
+
     return render(request, 'blog_app/edit_profile.html', {'profile': profile, 'form': form})
+
+def author(request, username):
+    author = Profile.objects.get(user__username=username)
+    user = User.objects.get(username=username)
+    return render(request, 'blog_app/author.html', {'author': author, 'user': user})
+

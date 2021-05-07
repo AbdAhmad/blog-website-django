@@ -1,0 +1,56 @@
+{% extends 'blog_app/base.html' %}
+
+{% block content %}   
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %} 
+    {% if posts %}
+    {% for post in posts %}
+    <div class="container">
+         <div class="row">
+             <div class="col-md-12">
+                 <div class="card top_margin"> 
+                     <div class="card-header">
+                         <div class="card-title">
+                            <h4>{{ post.title }}</h4>
+                         </div>
+                     </div>
+                     <div class="card-body">        
+                             <a href="{% url 'my_post' post.id %}"><button class="btn btn-primary">View blog</button></a>
+                     <h6 style="float: right;">{{ post.created_at }}</h6>
+                   
+                     </div>
+                 </div>
+             </div>
+         </div>
+    </div> 
+    {% endfor %}
+    {% else %}
+    <div class="container">
+         <div class="row">
+             <div class="col-md-6 offset-md-3">
+                 <div class="card"> 
+                     <div class="card-header text-white bg-dark">
+                         <div class="card-title offset-md-1">
+                              <h2>
+                            <h2>You haven't posted any blog</h2>
+                      </h2>
+                         </div>
+                     </div>
+                     <div class="card-body">        
+                        <form action="{% url 'post' %}">
+                            <div class="d-grid gap-2">
+                            <button class="btn btn-primary" type="submit">Post Blog</button>
+                            </div> 
+                        </form> 
+                     </div>
+                 </div>
+             </div>
+         </div>
+    </div> 
+    {% endif %}    
+{% endblock %}

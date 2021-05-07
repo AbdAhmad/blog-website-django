@@ -1,17 +1,9 @@
-from django.contrib.auth.forms import UserCreationForm
 from django import forms 
 from django.contrib.auth.models import User
 from .models import Post, Profile
-
-class SignupForm(UserCreationForm):
-
-    class Meta:
-        model = User
-        fields = ['username', 'password1', 'password2']
+from django.contrib.auth.forms import UserCreationForm
 
 class PostForm(forms.ModelForm):
-    title = forms.CharField(max_length=100)
-    content = forms.CharField(widget=forms.Textarea)
     
     class Meta:
         model = Post

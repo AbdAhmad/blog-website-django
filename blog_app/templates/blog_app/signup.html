@@ -1,10 +1,86 @@
 {% extends 'blog_app/base.html' %}
 
 {% block content %}
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Signup</button>
-    </form>
-    <a href="{% url 'login' %}"><button>Already have an account? Click here</button></a>
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4 offset-md-4">
+            <div class="card">
+                {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %} 
+                <div class="card-header text-white bg-dark">
+                    <div class="card-title">
+                        Signup
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="col-sm-10">
+                            <input type="text" style="padding-left: 10px;" placeholder="First Name" class="form-control-plaintext input_padding" name="first_name">
+                        </div>
+                        <br>
+                        <div class="col-sm-10">
+                            <input type="text" style="padding-left: 10px;" placeholder="Last Name" class="form-control-plaintext input_padding" name="last_name">
+                        </div>
+                        <br>
+                        <div class="col-sm-10">
+                            <input type="email" style="padding-left: 10px;" placeholder="Email" class="form-control-plaintext input_padding" name="email">
+                        </div>
+                        <br>
+                        <div class="col-sm-10">
+                            <input type="text" style="padding-left: 10px;" placeholder="Username" class="form-control-plaintext input_padding" name="username">
+                        </div>
+                        <br>
+                        <div class="col-sm-10">
+                            <input type="password" id="passwordOne" style="padding-left: 10px;" placeholder="Password" class="form-control-plaintext input_padding" name="password1">
+                            <input type="checkbox" onclick="passwordOneVisibilityToggle()"> Show Password
+
+                        </div>
+                        <br>
+                        <div class="col-sm-10">
+                            <input type="password" id="passwordTwo" style="padding-left: 10px;" placeholder="Confirm Password" class="form-control-plaintext input_padding" name="password2">
+                            <input type="checkbox" onclick="passwordTwoVisibilityToggle()"> Show Password
+
+                        </div>
+                        <br>
+                        <div class="d-grid gap-2">
+                        <button class="btn btn-success" type="submit">Signup</button>
+                        </div>
+                    </form>
+                    <form action="{% url 'login' %}">
+                        <div class="d-grid gap-2 top_margin">
+                        <button class="btn btn-secondary" type="submit">Already have an account? Login</button>
+                        </div> 
+                    </form> 
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function passwordOneVisibilityToggle() {
+    let passwordOne = document.getElementById("passwordOne");
+        if (passwordOne.type === "password") {
+            passwordOne.type = "text";
+        } else {
+            passwordOne.type = "password";
+        }
+    }
+    function passwordTwoVisibilityToggle() {
+        let passwordTwo = document.getElementById("passwordTwo");
+        if (passwordTwo.type === "password") {
+            passwordTwo.type = "text";
+        } else {
+            passwordTwo.type = "password";
+        }
+    }
+</script>
+
 {% endblock %}
