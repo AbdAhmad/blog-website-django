@@ -2,11 +2,11 @@
 
 {% block content %}   
 {% if messages %}
-<ul class="messages">
     {% for message in messages %}
-    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    <div id="message_container" class="alert alert-success">
+        {{ message }}
+    </div>
     {% endfor %}
-</ul>
 {% endif %} 
     {% if posts %}
     {% for post in posts %}
@@ -16,13 +16,12 @@
                  <div class="card top_margin"> 
                      <div class="card-header">
                          <div class="card-title">
-                            <h4>{{ post.title }}</h4>
+                            <h5>{{ post.title }}</h5>
                          </div>
                      </div>
                      <div class="card-body">        
                              <a href="{% url 'my_post' post.id %}"><button class="btn btn-primary">View blog</button></a>
                      <h6 style="float: right;">{{ post.created_at }}</h6>
-                   
                      </div>
                  </div>
              </div>

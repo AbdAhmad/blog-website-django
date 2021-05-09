@@ -4,14 +4,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <div class="card"> 
-                    {% if messages %}
-                    <ul class="messages">
-                        {% for message in messages %}
-                        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-                        {% endfor %}
-                    </ul>
-                    {% endif %}   
+                <div class="card">   
                     <div class="card-header">
                         <div class="card-title">
                            <h4>{{ post.title }}</h4>
@@ -20,7 +13,7 @@
                     <div class="card-body">        
                            {{ post.content }}
                     </div>
-                    <div>                       
+                    <div>                    
                     <a href="{% url 'delete_post' post.id %}"><button class="btn btn-danger col-md-6">Delete</button></a>
                     <a href="{% url 'edit_post' post.id %}"><button style="float: right;" class="btn btn-primary col-md-6">Edit</button></a>
                     </div>

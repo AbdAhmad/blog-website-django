@@ -37,7 +37,7 @@ def signup(request):
                 user = auth.authenticate(username=username, password=password1)
                 auth.login(request, user)
                 messages.success(request, 'Signup was successful')
-                return redirect('posts')
+                return redirect('profile')
         else:
             messages.error(request, "Two passwords didn't match")
             return redirect('signup')
@@ -54,7 +54,7 @@ def login(request):
 
         if user is not None:
             auth.login(request, user)
-            messages.success(request, 'Welcome' + username)
+            messages.success(request, 'Welcome ' + username)
             return redirect('posts')
         else:
             messages.error(request, 'Wrong credentials')
@@ -95,7 +95,7 @@ def delete_post(request, id):
     if request.method =="POST":
         post.delete()
         messages.success(request, 'Post deleted succesfully')
-        return redirect("myposts")
+        return redirect("my_posts")
     return render(request, 'blog_app/delete.html', {'post': post})
 
 @login_required
@@ -125,13 +125,12 @@ def edit_post(request, id):
         if post.is_valid():
             post.save()
             messages.success(request, 'Post updated successfully')
-            return redirect('myposts')
+            return redirect('my_posts')
             
     return render(request, 'blog_app/post.html', {'post': post})
 
 @login_required
 def edit_profile(request, id):
-    user = request.user
     profile = Profile.objects.get(id=id)
     if request.method == 'GET':
         form = EditProfileForm(instance=profile)
@@ -147,12 +146,19 @@ def edit_profile(request, id):
 
             # the `form.save` will also update the newest image & path.
             form.save()
+            messages.success(request, 'Profile updated successfully')
             return redirect('profile')
 
     return render(request, 'blog_app/edit_profile.html', {'profile': profile, 'form': form})
 
 def author(request, username):
-    author = Profile.objects.get(user__username=username)
     user = User.objects.get(username=username)
-    return render(request, 'blog_app/author.html', {'author': author, 'user': user})
+    posts = Post.objects.filter(author=user)
+    posts_count = posts.count()
+    return render(request, 'blog_app/author.html', {'user': user, 'posts_count': posts_count})
 
+
+def author_posts(request, username):
+    user = User.objects.get(username=username)
+    posts = Post.objects.filter(author=user) 
+    return render(request, 'blog_app/author_posts.html', {'posts': posts,'user': user})

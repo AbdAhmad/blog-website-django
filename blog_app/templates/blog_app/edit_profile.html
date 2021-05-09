@@ -13,22 +13,17 @@
                 <div class="card-body">
                     <form method="post" enctype="multipart/form-data">
                         {% csrf_token %}
-                        <div class="card-header text-white bg-dark">
-                            <div class="card-title">
-                                Location
-                            </div>
-                        </div>
-                        <div class="card-body">        
-                                {{ form.location }}
-                        </div>
-                        <div class="card-header text-white bg-dark">
-                            <div class="card-title">
-                                Content
-                            </div>
-                        </div>
-                        <div class="card-body">        
-                                {{ form.bio }}   
-                        </div>
+                        <h3>{{ profile.user }}</h3>
+                        <label>Image</label><br>
+                        {{ form.image }}
+                        <br>
+                        <label>Location</label><br>
+                        {{ form.location}}
+                        <br>
+                        <label>Bio</label><br>
+                        {{ form.bio }}
+                        <br>
+                        
                         <br>
                         <div class="d-grid gap-2">
                             <button class="btn btn-primary" type="submit">Update Profile</button>
