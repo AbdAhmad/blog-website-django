@@ -11,20 +11,31 @@
                        Welcome 
                     </div>
                 </div>
-                <div class="card-body">                
+                <div class="card-body">
+                    {% if user.is_authenticated %}
                     <form action="{% url 'signup' %}">
                         <img src="{% static 'bg_image.jpg' %}" height="50%" width="100%"> 
                         <br>
                         <br>
                         <div class="d-grid gap-2">
-                        <button class="btn btn-success" type="submit">Signup</button>
+                            <a href="/posts" class="btn btn-success" >View Posts</a>
                         </div> 
                     </form> 
-                <form action="{% url 'login' %}">
-                    <div class="d-grid gap-2 top_margin">
-                    <button class="btn btn-primary" type="submit">Login</button>
-                    </div> 
-                </form> 
+                    {% else %}
+                    <form action="{% url 'signup' %}">
+                        <img src="{% static 'bg_image.jpg' %}" height="50%" width="100%"> 
+                        <br>
+                        <br>
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-success" type="submit">Signup</button>
+                        </div> 
+                    </form> 
+                    <form action="{% url 'login' %}">
+                        <div class="d-grid gap-2 top_margin">
+                            <button class="btn btn-primary" type="submit">Login</button>
+                        </div> 
+                    </form> 
+                    {% endif %}
                 </div>
             </div>
         </div>

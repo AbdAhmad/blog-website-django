@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import User, auth
 from .forms import PostForm, EditProfileForm
 from .models import Post, Profile
+import os
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
@@ -43,7 +44,10 @@ def signup(request):
             return redirect('signup')
 
     else:
-        return render(request, 'blog_app/signup.html')
+        if request.user.is_authenticated:
+            return redirect('/')
+        else:
+            return render(request, 'blog_app/signup.html')
 
 
 def login(request):
@@ -59,8 +63,11 @@ def login(request):
         else:
             messages.error(request, 'Wrong credentials')
             return redirect('login')
-
-    return render(request, 'blog_app/login.html')
+    else:
+        if request.user.is_authenticated:
+            return redirect('/')
+        else:
+            return render(request, 'blog_app/login.html')
 
 @login_required
 def post(request):
@@ -103,6 +110,7 @@ def read_post(request, id):
     post = Post.objects.get(id=id)
     return render(request, 'blog_app/read_post.html', {'post': post})
 
+@login_required
 def my_post(request, id):
     post = Post.objects.get(id=id)
     return render(request, 'blog_app/my_post.html', {'post': post})
@@ -132,32 +140,39 @@ def edit_post(request, id):
 @login_required
 def edit_profile(request, id):
     profile = Profile.objects.get(id=id)
+    image_path = profile.image.path
     if request.method == 'GET':
         form = EditProfileForm(instance=profile)
     else:
         form = EditProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
-
-            # deleting old uploaded image.
-            image_path = profile.image.path
-            import os
-            if os.path.exists(image_path):
-                os.remove(image_path)
-
+            if 'default.jpg' in str(image_path):
+                form.save()
             # the `form.save` will also update the newest image & path.
-            form.save()
+            else:
+                profile = form.save(commit=False)
+                image_posted = form.cleaned_data.get('image')
+                try:
+                    image_posted_path = getattr(image_posted,'path')
+                    if image_path == image_posted_path:
+                        profile.save()
+                except:
+                    if os.path.exists(image_path):
+                        os.remove(image_path)
+                    profile.save()      
             messages.success(request, 'Profile updated successfully')
             return redirect('profile')
 
     return render(request, 'blog_app/edit_profile.html', {'profile': profile, 'form': form})
 
+@login_required
 def author(request, username):
     user = User.objects.get(username=username)
     posts = Post.objects.filter(author=user)
     posts_count = posts.count()
     return render(request, 'blog_app/author.html', {'user': user, 'posts_count': posts_count})
 
-
+@login_required
 def author_posts(request, username):
     user = User.objects.get(username=username)
     posts = Post.objects.filter(author=user) 
