@@ -1,4 +1,6 @@
 {% extends 'blog_app/base.html' %}
+{% load crispy_forms_tags %}
+{% crispy post post.helper %}
 
 {% block content %}
     <div class="container">
@@ -14,22 +16,22 @@
                     {% endif %}
                     <form method="post">
                         {% csrf_token %}
-                    <div class="card-header text-white bg-dark">
-                        <div class="card-title">
-                            Title
+                        <div class="card-header text-white bg-dark">
+                            <div class="card-title">
+                                Title
+                            </div>
                         </div>
-                    </div>
-                    <div class="card-body">        
-                            {{ post.title }}
-                    </div>
-                    <div class="card-header text-white bg-dark">
-                        <div class="card-title">
-                            Content
+                        <div class="card-body">        
+                                {{ post.title|as_crispy_field }}
                         </div>
-                    </div>
-                    <div class="card-body">        
-                            {{ post.content }}   
-                    </div>
+                        <div class="card-header text-white bg-dark">
+                            <div class="card-title">
+                                Content
+                            </div>
+                        </div>
+                        <div class="card-body">        
+                                {{ post.content|as_crispy_field }}   
+                        </div>
                     <div class="d-grid gap-2">
                         <button class="btn btn-primary" type="submit">Post</button> 
                     </div>
@@ -38,4 +40,9 @@
             </div>
         </div>
     </div> 
+    <style>
+        .asteriskField {
+            display: none;
+        }
+    </style>
 {% endblock %}

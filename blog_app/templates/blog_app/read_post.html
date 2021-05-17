@@ -12,7 +12,7 @@
                     </div>
                 </div>
                 <div class="card-body">        
-                        {{ post.content }}
+                        <pre>{{ post.content }}</pre>
                         <br>
                         <br>
                         <a href="{% url 'author' post.author.username %}"><h6 style="float: left;">By {{ post.author }}</h6></a>
@@ -22,7 +22,13 @@
         </div>
     </div>
 </div> 
-
+<style>
+    pre {
+    max-width: 100%;
+    overflow-x: hidden; 
+    overflow-y: scroll;
+}
+</style>
 
 
 {% endblock %}
