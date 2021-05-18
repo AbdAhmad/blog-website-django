@@ -7,7 +7,7 @@
             <div class="card">
                 {% if messages %}
                     {% for message in messages %}
-                    <div id="message_container" class="alert alert-danger">
+                    <div id="message_container" class="alert alert-success">
                         {{ message }}
                     </div>
                     {% endfor %}
@@ -21,30 +21,30 @@
                     <form method="POST">
                         {% csrf_token %}
                         <div class="col-sm-10">
-                            <input type="text" style="padding-left: 10px;" placeholder="First Name" class="form-control-plaintext input_padding" name="first_name">
+                            <input type="text" placeholder="First Name" class="form-control-plaintext input_padding" name="first_name">
                         </div>
                         <br>
                         <div class="col-sm-10">
-                            <input type="text" style="padding-left: 10px;" placeholder="Last Name" class="form-control-plaintext input_padding" name="last_name">
+                            <input type="text" placeholder="Last Name" class="form-control-plaintext input_padding" name="last_name">
                         </div>
                         <br>
                         <div class="col-sm-10">
-                            <input type="email" style="padding-left: 10px;" placeholder="Email" class="form-control-plaintext input_padding" name="email">
+                            <input type="email" placeholder="Email" class="form-control-plaintext input_padding" name="email">
                         </div>
                         <br>
                         <div class="col-sm-10">
-                            <input type="text" style="padding-left: 10px;" placeholder="Username" class="form-control-plaintext input_padding" name="username">
+                            <input type="text" placeholder="Username" class="form-control-plaintext input_padding" name="username">
                         </div>
                         <br>
                         <div class="col-sm-10">
-                            <input type="password" id="passwordOne" style="padding-left: 10px;" placeholder="Password" class="form-control-plaintext input_padding" name="password1">
-                            <input type="checkbox" onclick="passwordOneVisibilityToggle()"> Show Password
+                            <input type="password" id="passwordOne" placeholder="Password" class="form-control-plaintext input_padding" name="password1">
+                            <input type="checkbox" onclick="signupPasswordOneVisibilityToggle()"> Show Password
 
                         </div>
                         <br>
                         <div class="col-sm-10">
-                            <input type="password" id="passwordTwo" style="padding-left: 10px;" placeholder="Confirm Password" class="form-control-plaintext input_padding" name="password2">
-                            <input type="checkbox" onclick="passwordTwoVisibilityToggle()"> Show Password
+                            <input type="password" id="passwordTwo" placeholder="Confirm Password" class="form-control-plaintext input_padding" name="password2">
+                            <input type="checkbox" onclick="signupPasswordTwoVisibilityToggle()"> Show Password
 
                         </div>
                         <br>
@@ -63,21 +63,6 @@
     </div>
 </div>
 <script>
-    function passwordOneVisibilityToggle() {
-    let passwordOne = document.getElementById("passwordOne");
-        if (passwordOne.type === "password") {
-            passwordOne.type = "text";
-        } else {
-            passwordOne.type = "password";
-        }
-    }
-    function passwordTwoVisibilityToggle() {
-        let passwordTwo = document.getElementById("passwordTwo");
-        if (passwordTwo.type === "password") {
-            passwordTwo.type = "text";
-        } else {
-            passwordTwo.type = "password";
-        }
-    }
+
 </script>
 {% endblock %}

@@ -10,8 +10,9 @@
                            <h4>{{ post.title }}</h4>
                         </div>
                     </div>
-                    <div class="card-body">        
-                           {{ post.content }}
+                    <div class="card-body"> 
+                        <pre> {{ post.content }}</pre>       
+                          
                     </div>
                     <div>                    
                     <a href="{% url 'delete_post' post.id %}"><button class="btn btn-danger col-md-6">Delete</button></a>
@@ -24,4 +25,5 @@
             </div>
         </div>
    </div> 
+
 {% endblock %}

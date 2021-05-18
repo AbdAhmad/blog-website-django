@@ -7,7 +7,8 @@
         {{ message }}
     </div>
     {% endfor %}
-{% endif %}  
+{% endif %} 
+{% if posts %} 
     {% for post in posts %}    
     <div class="container">
             <div class="row">
@@ -30,5 +31,29 @@
             </div>
     </div>
     {% endfor %}
+    {% else %}
+    <div class="container">
+         <div class="row">
+             <div class="col-md-6 offset-md-3">
+                 <div class="card"> 
+                     <div class="card-header text-white bg-dark">
+                         <div class="card-title offset-md-1">
+                              <h2>
+                            <h2>No blogs to show</h2>
+                      </h2>
+                         </div>
+                     </div>
+                     <div class="card-body">        
+                        <form action="{% url 'post' %}">
+                            <div class="d-grid gap-2">
+                            <button class="btn btn-primary" type="submit">Post Blog</button>
+                            </div> 
+                        </form> 
+                     </div>
+                 </div>
+             </div>
+         </div>
+    </div> 
+    {% endif %}   
 
 {% endblock %}
