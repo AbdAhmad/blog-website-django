@@ -175,5 +175,12 @@ def author(request, username):
 @login_required
 def author_posts(request, username):
     user = User.objects.get(username=username)
-    posts = Post.objects.filter(author=user) 
+    posts = Post.objects.filter(author=user).order_by('-created_at')
     return render(request, 'blog_app/author_posts.html', {'posts': posts,'user': user})
+
+@login_required
+def search(request):
+    if request.method == 'POST':
+        searched_post = request.POST['search']
+        posts = Post.objects.filter(title__icontains=searched_post)
+        return render(request, 'blog_app/posts.html', {'posts': posts})

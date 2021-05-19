@@ -7,31 +7,49 @@
         {{ message }}
     </div>
     {% endfor %}
+    <br>
 {% endif %} 
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <form action="{% url 'search' %}" class="card card-sm" method="POST">
+                {% csrf_token %}
+                <div class="card-body row no-gutters align-items-center">
+                    <div class="col">
+                        <input class="form-control" type="search" placeholder="Search" name="search">
+                    </div>
+                    <div class="col-auto">
+                        <button class="btn btn-primary" type="submit">Search</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 {% if posts %} 
     {% for post in posts %}    
     <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="card  top_margin">
-                        <div class="card-header">
-                            <div class="card-title">
-                                <h5>{{ post.title }}</h5>
-                            </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card  top_margin">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <h5>{{ post.title }}</h5>
                         </div>
-                        <div class="card-body">        
-                                <a href="{% url 'read_post' post.id %}"><button class="btn btn-primary">Read blog</button></a>
-                                
-                                <h6 style="float: right;">{{ post.created_at }}</h6>
-                                <br>
-                                <a href="{% url 'author' post.author.username %}"><h6 style="float: right;">By {{ post.author }}</h6></a>                        
-                        </div>
+                    </div>
+                    <div class="card-body">        
+                        <a href="{% url 'read_post' post.id %}"><button class="btn btn-primary">Read blog</button></a>
+                        <h6 style="float: right;">{{ post.created_at }}</h6>
+                        <br>
+                        <a href="{% url 'author' post.author.username %}"><h6 style="float: right;">By {{ post.author }}</h6></a>                        
                     </div>
                 </div>
             </div>
+        </div>
     </div>
     {% endfor %}
     {% else %}
+    <br>
     <div class="container">
          <div class="row">
              <div class="col-md-6 offset-md-3">
