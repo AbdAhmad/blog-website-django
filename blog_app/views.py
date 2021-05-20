@@ -16,7 +16,6 @@ def index(request):
 def signup(request):
     if request.method == 'POST':
         first_name = request.POST['first_name']
-        last_name = request.POST['last_name']
         email = request.POST['email']
         username = request.POST['username']
         password1 = request.POST['password1']
@@ -31,7 +30,7 @@ def signup(request):
                 messages.error(request, 'This username is already taken')
                 return redirect('signup')
             else:
-                user = User.objects.create_user(username=username, password=password1, first_name=first_name, last_name=last_name, email=email)
+                user = User.objects.create_user(first_name=first_name, email=email, username=username, password=password1)
                 user.save()
                 username = request.POST['username']
                 password1 = request.POST['password1']

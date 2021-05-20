@@ -15,7 +15,6 @@
 
 <nav class="navbar navbar-expand-lg">
     <div class="container-fluid">
-      {% if request.user.is_authenticated %}
           <a class="navbar-brand text-white" href="{% url 'posts' %}">Blogs</a>
       <button class="navbar-toggler navbar-dark" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -25,8 +24,11 @@
           <a class="nav-link text-white" href="{% url 'post' %}">Post</a>
           <a class="nav-link text-white" href="{% url 'my_posts' %}">My Posts</a>
           <a class="nav-link text-white" href="{% url 'logout' %}">Logout</a>
-          <a class="nav-link text-white" href="{% url 'profile' %}"><img class="profile_pic" height="20px" width="20px" src="{{ user.profile.image.url }}"> Welcome {{ request.user.first_name }}</a>
-      {% endif %}
+          {% with full_name=request.user.first_name.split %}
+          {% for name in full_name|slice:":1" %}
+          <a class="nav-link text-white" href="{% url 'profile' %}"><img class="profile_pic" height="20px" width="20px" src="{{ user.profile.image.url }}"> Welcome {{ name }}</a>
+          {% endfor %}
+          {% endwith %}        
         </div>
       </div>
     </div>
