@@ -144,24 +144,7 @@ def edit_profile(request, id):
     else:
         form = EditProfileForm(request.POST, instance=profile)
         if form.is_valid():
-<<<<<<< HEAD
-            form.save()      
-=======
-            if 'default.png' in str(image_path):
-                form.save()
-            # the `form.save` will also update the newest image & path.
-            else:
-                profile = form.save(commit=False)
-                image_posted = form.cleaned_data.get('image')
-                try:
-                    image_posted_path = getattr(image_posted,'path')
-                    if image_path == image_posted_path:
-                        profile.save()
-                except:
-                    if os.path.exists(image_path):
-                        os.remove(image_path)
-                    profile.save()      
->>>>>>> 9e11e4b46611e2e0f9eab48aa86cc1d9864fca9c
+            form.save()          
             messages.success(request, 'Profile updated successfully')
             return redirect('profile')
 
