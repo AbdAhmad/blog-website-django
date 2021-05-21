@@ -7,7 +7,7 @@
             <div class="card">
                 {% if messages %}
                     {% for message in messages %}
-                    <div id="message_container" class="alert alert-success">
+                    <div id="message_container" class="alert alert-danger">
                         {{ message }}
                     </div>
                     {% endfor %}
@@ -21,19 +21,15 @@
                     <form method="POST">
                         {% csrf_token %}
                         <div class="col-sm-10">
-                            <input type="text" placeholder="First Name" class="form-control-plaintext input_padding" name="first_name">
+                            <input type="text" placeholder="Name" class="form-control-plaintext input_padding" name="first_name" required>
                         </div>
                         <br>
                         <div class="col-sm-10">
-                            <input type="text" placeholder="Last Name" class="form-control-plaintext input_padding" name="last_name">
+                            <input type="email" placeholder="Email" class="form-control-plaintext input_padding" name="email" required>
                         </div>
                         <br>
                         <div class="col-sm-10">
-                            <input type="email" placeholder="Email" class="form-control-plaintext input_padding" name="email">
-                        </div>
-                        <br>
-                        <div class="col-sm-10">
-                            <input type="text" placeholder="Username" class="form-control-plaintext input_padding" name="username">
+                            <input type="text" placeholder="Username" class="form-control-plaintext input_padding" name="username" required>
                         </div>
                         <br>
                         <div class="col-sm-10">

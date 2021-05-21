@@ -11,7 +11,7 @@
                     </div>
                 </div>
                 <div class="card-body"> 
-                        <h6><img src="{% static 'id-card.png' %}" height="25px" width="25px"> {{ user.first_name }} {{ user.last_name }}</h6>
+                        <h6><img src="{% static 'id-card.png' %}" height="25px" width="25px"> {{ user.first_name }}</h6>
                         <h6><img src="{% static 'gmail.jpg' %}" height="30px" width="30px"> {{ user.email }}</h6>
                 {% if user.profile.location is not None or profile.bio is not None %}
                         <h6><img src="{% static 'location.jpg' %}" height="25px" width="25px"> {{ user.profile.location }}</h6>
