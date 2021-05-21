@@ -145,7 +145,7 @@ def edit_profile(request, id):
     else:
         form = EditProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
-            if 'default.jpg' in str(image_path):
+            if 'default.png' in str(image_path):
                 form.save()
             # the `form.save` will also update the newest image & path.
             else:
