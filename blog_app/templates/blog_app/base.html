@@ -25,7 +25,7 @@
           <a class="nav-link text-white" href="{% url 'post' %}">Post</a>
           <a class="nav-link text-white" href="{% url 'my_posts' %}">My Posts</a>
           <a class="nav-link text-white" href="{% url 'logout' %}">Logout</a>
-          <a class="nav-link text-white" href="{% url 'profile' %}"><img class="profile_pic" height="20px" width="20px" src="{{ user.profile.image.url }}"> Welcome {{ request.user.first_name }}</a>
+          <a class="nav-link text-white" href="{% url 'profile' %}">Welcome {{ request.user.first_name }}</a>
       {% endif %}
         </div>
       </div>

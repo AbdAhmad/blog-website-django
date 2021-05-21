@@ -140,26 +140,12 @@ def edit_post(request, id):
 @login_required
 def edit_profile(request, id):
     profile = Profile.objects.get(id=id)
-    image_path = profile.image.path
     if request.method == 'GET':
         form = EditProfileForm(instance=profile)
     else:
-        form = EditProfileForm(request.POST, request.FILES, instance=profile)
+        form = EditProfileForm(request.POST, instance=profile)
         if form.is_valid():
-            if 'default.jpg' in str(image_path):
-                form.save()
-            # the `form.save` will also update the newest image & path.
-            else:
-                profile = form.save(commit=False)
-                image_posted = form.cleaned_data.get('image')
-                try:
-                    image_posted_path = getattr(image_posted,'path')
-                    if image_path == image_posted_path:
-                        profile.save()
-                except:
-                    if os.path.exists(image_path):
-                        os.remove(image_path)
-                    profile.save()      
+            form.save()      
             messages.success(request, 'Profile updated successfully')
             return redirect('profile')
 
