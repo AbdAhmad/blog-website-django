@@ -1,7 +1,5 @@
 from django import forms 
-from django.contrib.auth.models import User
 from .models import Post, Profile
-from django.contrib.auth.forms import UserCreationForm
 from crispy_forms.helper import FormHelper
 
 class PostForm(forms.ModelForm):

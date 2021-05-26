@@ -127,10 +127,6 @@ STATICFILES_DIRS = (
     BASE_DIR / 'static',
 )
 
-
 LOGIN_REDIRECT_URL = 'post'
-
-MEDIA_ROOT = ( BASE_DIR / 'pictures')
-MEDIA_URL = '/pictures/'
 
 LOGIN_URL = 'login'

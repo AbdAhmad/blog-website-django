@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="{% static 'css/main.css' %}">
     <script src="{% static 'js/main.js' %}"></script>
 </head>
-
+{% if user.is_authenticated %}
 <nav class="navbar navbar-expand-lg">
     <div class="container-fluid">
           <a class="navbar-brand text-white" href="{% url 'posts' %}">Blogs</a>
@@ -24,18 +24,14 @@
           <a class="nav-link text-white" href="{% url 'post' %}">Post</a>
           <a class="nav-link text-white" href="{% url 'my_posts' %}">My Posts</a>
           <a class="nav-link text-white" href="{% url 'logout' %}">Logout</a>
-<<<<<<< HEAD
-          <a class="nav-link text-white" href="{% url 'profile' %}">Welcome {{ request.user.first_name }}</a>
-      {% endif %}
-=======
           <!-- Converting the name into a list -->
           {% with full_name=request.user.first_name.split %}
           <!-- Fetching only the first name from the list -->
           {% for name in full_name|slice:":1" %}
-          <a class="nav-link text-white" href="{% url 'profile' %}"><img class="profile_pic" height="20px" width="20px" src="{{ user.profile.image.url }}"> Welcome {{ name }}</a>
+          <a class="nav-link text-white" href="{% url 'profile' %}"> Welcome {{ name }}</a>
           {% endfor %}
           {% endwith %}        
->>>>>>> 9e11e4b46611e2e0f9eab48aa86cc1d9864fca9c
+          {% endif %}
         </div>
       </div>
     </div>
