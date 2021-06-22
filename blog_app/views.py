@@ -8,8 +8,6 @@ from django.contrib.auth.decorators import login_required
 from django.conf import settings
 
 
-# Create your views here.
-
 def index(request):
     return render(request, 'blog_app/index.html')
 

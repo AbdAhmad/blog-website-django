@@ -17,6 +17,6 @@ urlpatterns = [
     path('edit_profile/<int:id>/', user_views.edit_profile, name='edit_profile'),
     path('my_post/<int:id>/', user_views.my_post, name='my_post'),
     path('author/<str:username>/', user_views.author, name='author'),
-    path('author_posts/<str:username>', user_views.author_posts, name="author_posts"),
-    path('search', user_views.search, name="search")
+    path('author_posts/<str:username>/', user_views.author_posts, name="author_posts"),
+    path('search/', user_views.search, name="search")
 ]

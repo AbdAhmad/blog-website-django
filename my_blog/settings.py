@@ -24,9 +24,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = '8(&1-o-v+fo9o)i^d0&!rsyn==zl#o5k#@sx^tedl-eac^)5i@'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['blogspro.herokuapp.com', 'localhost', '127.0.0.1']
+
+ALLOWED_HOSTS = ["blogspro.herokuapp.com", "localhost", "127.0.0.1"]
 
 
 # Application definition
@@ -117,7 +118,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
@@ -126,14 +126,16 @@ STATIC_URL = '/static/'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-# STATICFILES_DIRS = (
-#     BASE_DIR / 'static',
-# )
+STATICFILES_DIRS = (
+    BASE_DIR / 'blog_app/static',
+)
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 LOGIN_REDIRECT_URL = 'post'
 
 LOGIN_URL = 'login'
+
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 django_heroku.settings(locals())
