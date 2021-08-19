@@ -2,17 +2,27 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import User, auth
 from .forms import PostForm, EditProfileForm
 from .models import Post, Profile
-import os
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
-from django.conf import settings
+from django.views.generic.base import TemplateView
+from django.views import View
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic.list import ListView
+from django.views.generic.detail import DetailView
 
 
-def index(request):
-    return render(request, 'blog_app/index.html')
+class Index(TemplateView):
+    template_name = 'blog_app/index.html'
 
-def signup(request):
-    if request.method == 'POST':
+
+class Signup(View):
+
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect('/')
+        else:
+            return render(request, 'blog_app/signup.html')
+
+    def post(self, request, *args, **kwargs):
         first_name = request.POST['first_name']
         email = request.POST['email']
         username = request.POST['username']
@@ -40,15 +50,15 @@ def signup(request):
             messages.error(request, "Two passwords didn't match")
             return redirect('signup')
 
-    else:
+
+class Login(View):
+    def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
             return redirect('/')
         else:
-            return render(request, 'blog_app/signup.html')
+            return render(request, 'blog_app/login.html')
 
-
-def login(request):
-    if request.method == 'POST':
+    def post(self, request, *args, **kwargs):
         username = request.POST['username']
         password = request.POST['password']
         user = auth.authenticate(username=username, password=password)
@@ -60,110 +70,138 @@ def login(request):
         else:
             messages.error(request, 'Wrong credentials')
             return redirect('login')
-    else:
-        if request.user.is_authenticated:
-            return redirect('/')
-        else:
-            return render(request, 'blog_app/login.html')
 
-@login_required
-def post(request):
-    if request.method == 'POST':
-        post = PostForm(request.POST)
+
+class Blog(LoginRequiredMixin, View):
+
+    def get(self, request, *args, **kwargs):
+        post = PostForm()
+        context = {'post': post}
+        return render(request, 'blog_app/post.html', context)
+
+    def post(self, request, *args, **kwargs):
+        post = PostForm(data=request.POST)
         if post.is_valid():
             post = post.save(commit = False)
             post.author = request.user
             post.save()
             messages.success(request, 'Post added successfully')
-            return redirect('post')
-    else:
-        post = PostForm()
-    return render(request, 'blog_app/post.html', {'post': post})
+            return redirect('post')            
+        return render(request, 'blog_app/post.html', {'post': post})
 
-@login_required
-def posts(request):
 
-    # fetching latest posts first
-    posts = Post.objects.all().order_by('-created_at')
-    return render(request, 'blog_app/posts.html', {'posts': posts})
+class EditPost(LoginRequiredMixin, View):
 
-@login_required
-def my_posts(request):
-    user = request.user
-    posts = Post.objects.filter(author=user).order_by('-created_at')
-    return render(request, 'blog_app/my_posts.html', {'posts': posts})
+    def get(self, request, *args, **kwargs):
+        post = Post.objects.get(id=kwargs['pk'])
+        post = PostForm(instance=post)
+        context = {'post': post}
+        return render(request, 'blog_app/post.html', context)
 
-@login_required
-def delete_post(request, id):
-    post = Post.objects.get(id=id)
-    if request.method =="POST":
+    def post(self, request, *args, **kwargs):
+        post = Post.objects.get(id=kwargs['pk'])
+        post = PostForm(request.POST, instance=post)
+        if post.is_valid():
+            post = post.save(commit = False)
+            post.author = request.user
+            post.save()
+            messages.success(request, 'Post updated successfully')
+            return redirect('my_posts')            
+        return render(request, 'blog_app/post.html', {'post': post})
+ 
+
+class Posts(LoginRequiredMixin, ListView):
+
+    model = Post
+    context_object_name = 'posts'
+    template_name = 'blog_app/posts.html'
+    queryset = Post.objects.all().order_by('-created_at')
+
+
+class MyPosts(LoginRequiredMixin, ListView):
+
+    model = Post
+    context_object_name = 'posts'
+    template_name = 'blog_app/my_posts.html'  
+    def get_queryset(self):
+        return Post.objects.filter(author=self.request.user).order_by('-created_at')
+ 
+
+class DeletePost(LoginRequiredMixin, View):
+
+    def get(self, request, *args, **kwargs):
+        post = Post.objects.get(id=kwargs['pk'])
+        
+        context = {'post': post}
+        return render(request, 'blog_app/delete.html', context)
+
+    def post(self, request, *args, **kwargs):
+        post = Post.objects.get(id=kwargs['pk'])
         post.delete()
         messages.success(request, 'Post deleted succesfully')
         return redirect("my_posts")
-    return render(request, 'blog_app/delete.html', {'post': post})
 
-@login_required
-def read_post(request, id):
-    post = Post.objects.get(id=id)
-    return render(request, 'blog_app/read_post.html', {'post': post})
 
-@login_required
-def my_post(request, id):
-    post = Post.objects.get(id=id)
-    return render(request, 'blog_app/my_post.html', {'post': post})
+class ReadPost(LoginRequiredMixin, DetailView):
+    model = Post
+    template_name = 'blog_app/read_post.html'
+    context_object_name = 'post'
+    
 
-@login_required
-def profile_page(request):
-    user = request.user
-    posts = Post.objects.filter(author=user)
-    posts_count = posts.count()
-    profile = Profile.objects.get(user=user)
-    return render(request, 'blog_app/profile.html', {'user': user, 'posts_count': posts_count, 'profile': profile})
+class MyPost(LoginRequiredMixin, DetailView):
+    model = Post
+    template_name = 'blog_app/my_post.html'
+    context_object_name = 'post'
 
-@login_required
-def edit_post(request, id):
-    post = Post.objects.get(id=id)
-    if request.method == 'GET':
-        post = PostForm(instance=post)
-    else:  # POST
-        post = PostForm(request.POST, instance=post)
-        if post.is_valid():
-            post.save()
-            messages.success(request, 'Post updated successfully')
-            return redirect('my_posts')
-            
-    return render(request, 'blog_app/post.html', {'post': post})
 
-@login_required
-def edit_profile(request, id):
-    profile = Profile.objects.get(id=id)
-    if request.method == 'GET':
+class ProfilePage(LoginRequiredMixin, View):
+
+    def get(self, request, *args, **kwargs):
+        user = self.request.user
+        posts = Post.objects.filter(author=user)
+        posts_count = posts.count()
+        profile = Profile.objects.get(user=user)
+        return render(request, 'blog_app/profile.html', {'user': user, 'posts_count': posts_count, 'profile': profile})
+
+
+class EditProfile(LoginRequiredMixin, View):
+
+    def get(self, request, *args, **kwargs):
+        profile = Profile.objects.get(id=kwargs['pk'])
         form = EditProfileForm(instance=profile)
-    else:
+        context = {'form': form, 'profile': profile}
+        return render(request, 'blog_app/edit_profile.html', context)
+
+    def post(self, request, *args, **kwargs):
+        profile = Profile.objects.get(id=kwargs['pk'])
         form = EditProfileForm(request.POST, instance=profile)
         if form.is_valid():
-            form.save()          
+            form.save()
             messages.success(request, 'Profile updated successfully')
-            return redirect('profile')
+            return redirect('profile')            
+        return render(request, 'blog_app/edit_profile.html', {'form': form, 'profile': profile})
 
-    return render(request, 'blog_app/edit_profile.html', {'profile': profile, 'form': form})
 
-@login_required
-def author(request, username):
-    user = User.objects.get(username=username)
-    posts = Post.objects.filter(author=user)
-    posts_count = posts.count()
-    return render(request, 'blog_app/author.html', {'user': user, 'posts_count': posts_count})
+class Author(LoginRequiredMixin, View):
 
-@login_required
-def author_posts(request, username):
-    user = User.objects.get(username=username)
-    posts = Post.objects.filter(author=user).order_by('-created_at')
-    return render(request, 'blog_app/author_posts.html', {'posts': posts,'user': user})
+    def get(self, request, *args, **kwargs):
+        user = User.objects.get(username=kwargs['pk'])
+        posts = Post.objects.filter(author=user)
+        posts_count = posts.count()
+        return render(request, 'blog_app/author.html', {'posts_count': posts_count,'user': user})
 
-@login_required
-def search(request):
-    if request.method == 'POST':
+
+class AuthorPosts(LoginRequiredMixin, View):
+
+    def get(self, request, *args, **kwargs):
+        user = User.objects.get(username=kwargs['username'])
+        posts = Post.objects.filter(author=user).order_by('-created_at')
+        return render(request, 'blog_app/author_posts.html', {'posts': posts,'user': user})
+    
+
+class Search(LoginRequiredMixin, View):
+
+    def post(self, request, *args, **kwargs):
         searched_post = request.POST['search']
         posts = Post.objects.filter(title__icontains=searched_post)
         return render(request, 'blog_app/posts.html', {'posts': posts})
