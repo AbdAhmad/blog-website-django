@@ -17,24 +17,6 @@ The aim of this project was to create a standard blog website with all the neces
 * Backend : Python, Django
 * Database : SQLite
 
-## Installation Guide
-A step by step series of examples that tell you how to get a development env running
-
-In your cmd or terminal:
-
-```bash
-git clone https://github.com/AbdAhmad/blog-django.git
-```
-
-Then,
-* cd blog-django
-* pip install -r requirements.txt
-* python manage.py makemigrations
-* python manage.py migrate
-* python manage.py runserver
-
-You are done with the setup now!
-
 ## Preview
 
 ### Wecome page
@@ -53,9 +35,30 @@ You are done with the setup now!
 ### Profile page
 ![Profile](https://user-images.githubusercontent.com/49855656/141513831-3632a754-e200-4976-ad5c-b733a860927b.png)
 
+
+## Installation Guide
+A step by step series of examples that tell you how to get a development env running
+
+In your cmd or terminal:
+
+```bash
+git clone https://github.com/AbdAhmad/blog-django.git
+```
+
+Then,
+* cd blog-django
+* pip install -r requirements.txt
+* python manage.py makemigrations
+* python manage.py migrate
+* python manage.py runserver
+
+You are done with the setup now!
+
 ## Acknowledgements & References
 * [Python](https://docs.python.org/3/)
 * [Django Documentation](https://docs.djangoproject.com/en/3.2/)
 * [Javascript](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
 * [Stackoverflow](https://stackoverflow.com/)
 * [Heroku](https://www.heroku.com/)
+
+## Developed by [Abdulla Ahmad](https://github.com/AbdAhmad)
