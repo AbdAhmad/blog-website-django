@@ -56,7 +56,7 @@ You are done with the setup now!
 
 ## Acknowledgements & References
 * [Python](https://docs.python.org/3/)
-* [Django Documentation](https://docs.djangoproject.com/en/3.2/)
+* [Django](https://docs.djangoproject.com/en/3.2/)
 * [Javascript](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
 * [Stackoverflow](https://stackoverflow.com/)
 * [Heroku](https://www.heroku.com/)
