@@ -1,17 +1,11 @@
 {% extends 'blog_app/base.html' %}
 
+{% block title %} Sign up {% endblock %}
+
 {% block content %}   
-{% if messages %}
-    {% for message in messages %}
-    <div id="message_container" class="alert alert-success">
-        {{ message }}
-    </div>
-    {% endfor %}
-    <br>
-{% endif %} 
+
 {% if posts %}
-<div class="container">
-    <div class="row">
+
         <div class="col-md-12">
             <form action="{% url 'search' %}" class="card card-sm" method="POST">
                 {% csrf_token %}
@@ -25,12 +19,10 @@
                 </div>
             </form>
         </div>
-    </div>
-</div>
+
    
     {% for post in posts %}
-    <div class="container">
-         <div class="row">
+
              <div class="col-md-12">
                  <div class="card top_margin"> 
                      <div class="card-header">
@@ -44,13 +36,11 @@
                      </div>
                  </div>
              </div>
-         </div>
-    </div> 
+     
     {% endfor %}
     {% else %}
     <br>
-    <div class="container">
-         <div class="row">
+   
              <div class="col-md-6 offset-md-3">
                  <div class="card"> 
                      <div class="card-header text-white bg-dark">
@@ -69,7 +59,6 @@
                      </div>
                  </div>
              </div>
-         </div>
-    </div> 
+   
     {% endif %}    
 {% endblock %}

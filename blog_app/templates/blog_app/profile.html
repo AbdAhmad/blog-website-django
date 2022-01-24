@@ -1,17 +1,12 @@
 {% extends 'blog_app/base.html' %}
 {% load static %}
+
+{% block title %} Sign up {% endblock %}
+
 {% block content %}
-<div class="container">
-    <div class="row">
+
         <div class="col-md-6 offset-md-3">
             <div class="card">
-                {% if messages %}
-                {% for message in messages %}
-                <div id="message_container" class="alert alert-success">
-                    {{ message }}
-                </div>
-                {% endfor %}
-                {% endif %} 
                 <div class="card-header">
                     <div class="card-title col-md-9 offset-md-3">
                         <!-- <img class="profile_pic" height="200px" width="200px" src="{{ user.profile.image.url }}">  -->
@@ -38,8 +33,6 @@
                     </div>
                </form>
            </div>
-
       </div>
- </div>
-</div>
+
 {% endblock %}
