@@ -30,7 +30,7 @@
                         </div>
                     </div>
                     <div class="card-body">        
-                        <a href="{% url 'read_post' post.id %}"><button class="btn btn-primary">Read blog</button></a>
+                        <a href="{% url 'read_post' post.slug %}"><button class="btn btn-primary">Read blog</button></a>
                         <h6 style="float: right;">{{ post.created_at }}</h6>
                         <br>
                         <a href="{% url 'author' post.author.username %}"><h6 style="float: right;">By {{ post.author }}</h6></a>                        

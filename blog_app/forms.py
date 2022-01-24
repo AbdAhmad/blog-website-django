@@ -1,8 +1,8 @@
 from django import forms 
-from .models import Post, Profile
+from .models import Blog, Profile
 from crispy_forms.helper import FormHelper
 
-class PostForm(forms.ModelForm):
+class BlogForm(forms.ModelForm):
     helper = FormHelper()
     helper.form_show_labels = False
 
@@ -14,7 +14,7 @@ class PostForm(forms.ModelForm):
     )
 
     class Meta:
-        model = Post
+        model = Blog
         fields = ['title', 'content']
 
 class EditProfileForm(forms.ModelForm):
