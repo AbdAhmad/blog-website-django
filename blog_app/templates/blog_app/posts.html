@@ -18,27 +18,27 @@
                     </div>
                 </div>
             </form>
-        </div>
 
-    {% for post in posts %}    
-
-            <div class="col-md-12">
-                <div class="card  top_margin">
+                <div class="card mt-1">
+                    {% for post in posts %}   
                     <div class="card-header">
                         <div class="card-title">
-                            <h5>{{ post.title }}</h5>
+                            <a href="{% url 'read_post' post.slug %}" class="blog-title"><h5>{{ post.title }}</h5></a>
                         </div>
                     </div>
                     <div class="card-body">        
-                        <a href="{% url 'read_post' post.slug %}"><button class="btn btn-primary">Read blog</button></a>
-                        <h6 style="float: right;">{{ post.created_at }}</h6>
-                        <br>
-                        <a href="{% url 'author' post.author.username %}"><h6 style="float: right;">By {{ post.author }}</h6></a>                        
+                        <a href="{% url 'read_post' post.slug %}">{{post.content|slice:"295"}} {% if post.content|length > 295 %}...{% endif %}</a>                       
                     </div>
+                    <div class="px-4">{{post.views}} Views</div>
+                    <div class="px-4" style="display: flex; flex-direction: row-reverse;">
+                        <p >Posted on {{ post.created_at }} by <a href="{% url 'author' post.author.username %}">{{ post.author }}</a></p>
+                    </div>
+                    <hr>
+                    {% endfor %}
                 </div>
             </div>
   
-    {% endfor %}
+
     {% else %}
     <br>
 
@@ -62,5 +62,11 @@
              </div>
 
     {% endif %}   
+
+<style>
+    .blog-title {
+        color: black;
+    }
+</style>
 
 {% endblock %}

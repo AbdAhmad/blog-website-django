@@ -1,18 +1,26 @@
-from logging import PlaceHolder
-from xml.etree.ElementTree import Comment
 from django import forms 
 from .models import Blog, Profile, Comment
 from crispy_forms.helper import FormHelper
 
 class BlogForm(forms.ModelForm):
+
     helper = FormHelper()
     helper.form_show_labels = False
 
     title = forms.CharField(
-        widget=forms.TextInput(attrs={'placeholder': 'Title'})
+        widget=forms.TextInput(
+            attrs={
+                'placeholder': 'Title'
+            }
+        )
     )
+
     content = forms.CharField( 
-        widget=forms.Textarea(attrs={'placeholder': 'Content'})
+        widget=forms.Textarea(
+            attrs={
+                'placeholder': 'Tell your story...'
+            }
+        )
     )
 
     class Meta:
@@ -28,10 +36,18 @@ class EditProfileForm(forms.ModelForm):
 
 
 class CommentForm(forms.ModelForm):
+
     helper = FormHelper()
     helper.form_show_labels = False
 
-    comment = forms.CharField(widget=forms.Textarea(attrs={'rows': 3, 'placeholder': 'Drop a comment'}))
+    comment = forms.CharField(
+        widget=forms.Textarea(
+            attrs={
+                'rows': 3, 
+                'placeholder': 'Drop a comment'
+            }
+        )
+    )
 
     class Meta:
         model = Comment

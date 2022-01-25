@@ -2,11 +2,11 @@
 {% load crispy_forms_tags %}
 {% crispy post post.helper %}
 
-{% block title %} Write Blog {% endblock %}
+{% block title %} Write Something {% endblock %}
 
 {% block content %}
 
-            <div class="col-md-4 offset-md-4">
+            <div class="col-md-12">
                 <div class="card">
                     {% if messages %}
                     {% for message in messages %}
@@ -17,24 +17,14 @@
                     {% endif %}
                     <form method="post">
                         {% csrf_token %}
-                        <div class="card-header text-white bg-dark">
-                            <div class="card-title">
-                                Title
-                            </div>
-                        </div>
                         <div class="card-body">        
                                 {{ post.title|as_crispy_field }}
-                        </div>
-                        <div class="card-header text-white bg-dark">
-                            <div class="card-title">
-                                Content
-                            </div>
                         </div>
                         <div class="card-body">        
                                 {{ post.content|as_crispy_field }}   
                         </div>
-                    <div class="d-grid gap-2">
-                        <button class="btn btn-primary" type="submit">Post</button> 
+                    <div class="d-grid gap-2 p-2">
+                        <button class="btn btn-outline-primary" type="submit">Post</button> 
                     </div>
                     </form>
                 </div>

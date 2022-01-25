@@ -5,6 +5,7 @@ urlpatterns = [
     path('', views.Welcome.as_view(), name='welcome'),
     path('post/', views.CreateBlog.as_view(), name='post'),
     path('posts/', views.Posts.as_view(), name='posts'),
+    path('like_blog/<str:slug>', views.like_blog, name='like_blog'),
     path('my_posts/', views.MyPosts.as_view(), name='my_posts'),
     path('delete_post/<int:pk>/', views.DeletePost.as_view(), name='delete_post'),
     path('edit_post/<int:pk>/', views.EditPost.as_view(), name='edit_post'),

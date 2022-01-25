@@ -31,7 +31,7 @@ class Comment(models.Model):
 
 
 class Like(models.Model):
-    like = models.BooleanField(False)
+    like = models.BooleanField(default=False)
     blog = models.ForeignKey(Blog, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 

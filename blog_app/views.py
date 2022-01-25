@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User, auth
 from .forms import BlogForm, EditProfileForm, CommentForm
-from .models import Blog, Profile, Comment
+from .models import Blog, Profile, Comment, Like
 from django.contrib import messages
 from django.views.generic.base import TemplateView
 from django.views import View
@@ -88,32 +88,14 @@ class DeletePost(LoginRequiredMixin, View):
         return redirect("my_posts")
 
 
-# class ReadPost(LoginRequiredMixin, View):
-    
-#     def get(self, request, *args, **kwargs):
-#         blog = Blog.objects.get(slug=kwargs['slug'])
-#         comment_form = CommentForm()
-#         context = {
-#             'blog': blog,
-#             'comment_form': comment_form
-#         }
-#         return render(request, 'blog_app/read_post.html', context)
-
-#     def post(self, request, *args, **kwargs):
-#         blog = Blog.objects.get(slug=kwargs['slug'])
-#         comment_form = CommentForm(instance=request.POST)
-#         if comment_form.is_valid():
-#             comment_form.save(commit=False)
-#             comment_form.user = request.user
-#             comment_form.blog = blog
-#             messages.success(request, 'Comment added')
-#         return redirect('read_post', slug=kwargs['slug'])
-
-
 @login_required
 def read_post(request, slug):
     blog = Blog.objects.get(slug=slug)
     comments = Comment.objects.filter(blog=blog)
+    blog.views = blog.views + 1
+    likes = Like.objects.filter(blog=blog).count()
+    blog.likes = likes
+    blog.save()
     if request.method == 'POST':
         comment_form = CommentForm(data=request.POST)
         if comment_form.is_valid():
@@ -132,7 +114,26 @@ def read_post(request, slug):
     return render(request, 'blog_app/read_post.html', context)
 
 
-    
+@login_required
+def like_blog(request, slug):
+    blog = Blog.objects.get(slug=slug)
+    user = request.user
+    try:
+        user_likes = Like.objects.filter(user=user)
+        like = user_likes.get(blog=blog)
+    except Like.DoesNotExist:
+        like = None
+
+    if like is not None:
+        like.delete()
+        messages.success(request, 'You have unliked this blog')
+    else:
+        like = Like(like=True, user=user, blog=blog)
+        like.save()
+        messages.success(request, 'You have liked this post')
+    return redirect('read_post', slug=slug)
+
+
 
 class MyPost(LoginRequiredMixin, DetailView):
     model = Blog
