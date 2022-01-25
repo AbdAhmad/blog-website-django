@@ -14,69 +14,13 @@ class Index(TemplateView):
     template_name = 'blog_app/index.html'
 
 
-class Signup(View):
-
-    def get(self, request, *args, **kwargs):
-        if request.user.is_authenticated:
-            return redirect('/')
-        else:
-            return render(request, 'blog_app/signup.html')
-
-    def post(self, request, *args, **kwargs):
-        first_name = request.POST['first_name']
-        email = request.POST['email']
-        username = request.POST['username']
-        password1 = request.POST['password1']
-        password2 = request.POST['password2']
-
-        if len(password1) < 8:
-            messages.error(request, 'Password is too short')
-            return redirect('signup')
-
-        if password1 == password2:
-            if User.objects.filter(username=username).exists():
-                messages.error(request, 'This username is already taken')
-                return redirect('signup')
-            else:
-                user = User.objects.create_user(first_name=first_name, email=email, username=username, password=password1)
-                user.save()
-                username = request.POST['username']
-                password1 = request.POST['password1']
-                user = auth.authenticate(username=username, password=password1)
-                auth.login(request, user)
-                messages.success(request, 'Signup was successful')
-                return redirect('profile')
-        else:
-            messages.error(request, "Two passwords didn't match")
-            return redirect('signup')
-
-
-class Login(View):
-    def get(self, request, *args, **kwargs):
-        if request.user.is_authenticated:
-            return redirect('/')
-        else:
-            return render(request, 'blog_app/login.html')
-
-    def post(self, request, *args, **kwargs):
-        username = request.POST['username']
-        password = request.POST['password']
-        user = auth.authenticate(username=username, password=password)
-
-        if user is not None:
-            auth.login(request, user)
-            messages.success(request, 'Welcome ' + username)
-            return redirect('posts')
-        else:
-            messages.error(request, 'Wrong credentials')
-            return redirect('login')
-
-
 class CreateBlog(LoginRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
         post = BlogForm()
-        context = {'post': post}
+        context = {
+            'post': post
+            }
         return render(request, 'blog_app/post.html', context)
 
     def post(self, request, *args, **kwargs):
@@ -95,7 +39,9 @@ class EditPost(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         post = Blog.objects.get(id=kwargs['pk'])
         post = BlogForm(instance=post)
-        context = {'post': post}
+        context = {
+            'post': post
+            }
         return render(request, 'blog_app/post.html', context)
 
     def post(self, request, *args, **kwargs):
@@ -131,7 +77,6 @@ class DeletePost(LoginRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
         post = Blog.objects.get(id=kwargs['pk'])
-        
         context = {'post': post}
         return render(request, 'blog_app/delete.html', context)
 
