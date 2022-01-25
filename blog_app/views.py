@@ -35,27 +35,21 @@ class CreateBlog(LoginRequiredMixin, View):
         return render(request, 'blog_app/post.html', {'post': post})
 
 
-class EditPost(LoginRequiredMixin, View):
-
-    def get(self, request, *args, **kwargs):
-        post = Blog.objects.get(id=kwargs['pk'])
-        post = BlogForm(instance=post)
-        context = {
-            'post': post
-            }
-        return render(request, 'blog_app/post.html', context)
-
-    def post(self, request, *args, **kwargs):
-        post = Blog.objects.get(id=kwargs['pk'])
+@login_required
+def edit_blog(request, slug):
+    post = Blog.objects.get(slug=slug)
+    if request.method == 'POST':
         post = BlogForm(request.POST, instance=post)
         if post.is_valid():
             post = post.save(commit = False)
             post.author = request.user
             post.save()
             messages.success(request, 'Blog updated successfully')
-            return redirect('my_posts')            
-        return render(request, 'blog_app/post.html', {'post': post})
- 
+            return redirect('my_post', slug=slug)            
+    else:
+        post = BlogForm(instance=post)
+    return render(request, 'blog_app/post.html', {'post': post})
+
 
 class Posts(LoginRequiredMixin, ListView):
 
@@ -74,18 +68,12 @@ class MyPosts(LoginRequiredMixin, ListView):
         return Blog.objects.filter(author=self.request.user).order_by('-created_at')
  
 
-class DeletePost(LoginRequiredMixin, View):
-
-    def get(self, request, *args, **kwargs):
-        post = Blog.objects.get(id=kwargs['pk'])
-        context = {'post': post}
-        return render(request, 'blog_app/delete.html', context)
-
-    def post(self, request, *args, **kwargs):
-        post = Blog.objects.get(id=kwargs['pk'])
-        post.delete()
-        messages.success(request, 'Blog deleted succesfully')
-        return redirect("my_posts")
+@login_required
+def delete_blog(request, slug):
+    blog = Blog.objects.get(slug=slug)
+    blog.delete()
+    messages.success(request, 'Blog Deleted')
+    return redirect('my_posts')
 
 
 @login_required
@@ -104,7 +92,7 @@ def read_post(request, slug):
             comment.blog = blog
             comment.save()
             messages.success(request, 'Comment added')
-        return redirect('read_post', slug=slug)
+        return redirect('read_post', slug=blog.slug)
     comment_form = CommentForm()
     context = {
         'blog': blog,
@@ -114,28 +102,8 @@ def read_post(request, slug):
     return render(request, 'blog_app/read_post.html', context)
 
 
-@login_required
-def like_blog(request, slug):
-    blog = Blog.objects.get(slug=slug)
-    user = request.user
-    try:
-        user_likes = Like.objects.filter(user=user)
-        like = user_likes.get(blog=blog)
-    except Like.DoesNotExist:
-        like = None
-
-    if like is not None:
-        like.delete()
-        messages.success(request, 'You have unliked this blog')
-    else:
-        like = Like(like=True, user=user, blog=blog)
-        like.save()
-        messages.success(request, 'You have liked this post')
-    return redirect('read_post', slug=slug)
-
-
-
 class MyPost(LoginRequiredMixin, DetailView):
+    
     model = Blog
     template_name = 'blog_app/my_post.html'
     context_object_name = 'post'
@@ -192,3 +160,23 @@ class Search(LoginRequiredMixin, View):
         searched_post = request.POST['search']
         posts = Blog.objects.filter(title__icontains=searched_post)
         return render(request, 'blog_app/posts.html', {'posts': posts})
+
+
+@login_required
+def like_blog(request, slug):
+    blog = Blog.objects.get(slug=slug)
+    user = request.user
+    try:
+        user_likes = Like.objects.filter(user=user)
+        like = user_likes.get(blog=blog)
+    except Like.DoesNotExist:
+        like = None
+
+    if like is not None:
+        like.delete()
+        messages.success(request, 'You have unliked this blog')
+    else:
+        like = Like(like=True, user=user, blog=blog)
+        like.save()
+        messages.success(request, 'You have liked this post')
+    return redirect('read_post', slug=slug)

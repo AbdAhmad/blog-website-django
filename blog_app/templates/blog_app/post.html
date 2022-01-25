@@ -8,13 +8,6 @@
 
             <div class="col-md-12">
                 <div class="card">
-                    {% if messages %}
-                    {% for message in messages %}
-                        <div id="message_container" class="alert alert-success">
-                            {{ message }}
-                        </div>
-                    {% endfor %}
-                    {% endif %}
                     <form method="post">
                         {% csrf_token %}
                         <div class="card-body">        
