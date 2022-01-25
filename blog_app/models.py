@@ -20,13 +20,23 @@ class Blog(models.Model):
 
 
 class Comment(models.Model):
-    comment = models.CharField(max_length=500)
+    comment = models.TextField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    blog = models.ForeignKey(Blog, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.comment[:50]
+
+
+class Like(models.Model):
+    like = models.BooleanField(False)
+    blog = models.ForeignKey(Blog, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.user.username
 
 
 class Profile(models.Model):
@@ -36,7 +46,7 @@ class Profile(models.Model):
     location = models.CharField(max_length=100, blank=True, null=True)
     bio = models.TextField(blank=True, null=True)
     blogs = models.ManyToManyField(Blog, blank=True)
-    date_joined = models.DateTimeField(auto_now_add=True)
+    date_joined = models.DateTimeField(auto_now_add=True, blank=True, null=True)
 
     def __str__(self):
         return self.user.username

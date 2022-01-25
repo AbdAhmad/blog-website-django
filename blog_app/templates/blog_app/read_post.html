@@ -1,4 +1,6 @@
 {% extends 'blog_app/base.html' %}
+{% load crispy_forms_tags %}
+{% crispy comment_form comment_form.helper %}
 
 {% block title %} {{ blog.title}} {% endblock %}
 
@@ -18,7 +20,26 @@
                         <h6 style="float: right;">{{ blog.created_at }}</h6>
                 </div>
             </div>
+            <br/>
+            <div class="card p-4">
+                {% if comments %}
+                {% for comment in comments %}
+                {{comment.comment}}
+                {{comment.user}}
+                {{comment.created_at}}
+                <br/>
+                {% endfor %}
+                {% endif %}
+                <form method="POST">
+                    {% csrf_token %}
+                    {{ comment_form.comment|as_crispy_field }}
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-outline-primary" type="submit">Add Comment</button>
+                    </div>
+                </form>
+            </div>
         </div>
+
    
 <style>
 pre { 

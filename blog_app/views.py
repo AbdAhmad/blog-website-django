@@ -1,16 +1,17 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User, auth
-from .forms import BlogForm, EditProfileForm
-from .models import Blog, Profile
+from .forms import BlogForm, EditProfileForm, CommentForm
+from .models import Blog, Profile, Comment
 from django.contrib import messages
 from django.views.generic.base import TemplateView
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
+from django.contrib.auth.decorators import login_required
 
 
-class Index(TemplateView):
+class Welcome(TemplateView):
     template_name = 'blog_app/index.html'
 
 
@@ -87,11 +88,50 @@ class DeletePost(LoginRequiredMixin, View):
         return redirect("my_posts")
 
 
-class ReadPost(LoginRequiredMixin, View):
+# class ReadPost(LoginRequiredMixin, View):
     
-    def get(self, request, *args, **kwargs):
-        blog = Blog.objects.get(slug=kwargs['slug'])
-        return render(request, 'blog_app/read_post.html', {'blog': blog})
+#     def get(self, request, *args, **kwargs):
+#         blog = Blog.objects.get(slug=kwargs['slug'])
+#         comment_form = CommentForm()
+#         context = {
+#             'blog': blog,
+#             'comment_form': comment_form
+#         }
+#         return render(request, 'blog_app/read_post.html', context)
+
+#     def post(self, request, *args, **kwargs):
+#         blog = Blog.objects.get(slug=kwargs['slug'])
+#         comment_form = CommentForm(instance=request.POST)
+#         if comment_form.is_valid():
+#             comment_form.save(commit=False)
+#             comment_form.user = request.user
+#             comment_form.blog = blog
+#             messages.success(request, 'Comment added')
+#         return redirect('read_post', slug=kwargs['slug'])
+
+
+@login_required
+def read_post(request, slug):
+    blog = Blog.objects.get(slug=slug)
+    comments = Comment.objects.filter(blog=blog)
+    if request.method == 'POST':
+        comment_form = CommentForm(data=request.POST)
+        if comment_form.is_valid():
+            comment = comment_form.save(commit=False)
+            comment.user = request.user
+            comment.blog = blog
+            comment.save()
+            messages.success(request, 'Comment added')
+        return redirect('read_post', slug=slug)
+    comment_form = CommentForm()
+    context = {
+        'blog': blog,
+        'comment_form': comment_form,
+        'comments': comments
+    }
+    return render(request, 'blog_app/read_post.html', context)
+
+
     
 
 class MyPost(LoginRequiredMixin, DetailView):
