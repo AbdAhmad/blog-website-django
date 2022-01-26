@@ -30,9 +30,45 @@ class BlogForm(forms.ModelForm):
 
 class EditProfileForm(forms.ModelForm):
 
+    helper = FormHelper()
+    helper.form_show_labels = False
+
+    full_name = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                'placeholder': 'Full Name'
+            }
+        )
+    )
+
+    email = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                'placeholder': 'Email'
+            }
+        )
+    )
+
+    location = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                'placeholder': 'Location'
+            }
+        )
+    )
+
+    bio = forms.CharField(
+        widget=forms.Textarea(
+            attrs={
+                'rows': 3,
+                'placeholder': 'Bio'
+            }
+        )
+    )
+
     class Meta:
         model = Profile
-        fields = ['location', 'bio', 'full_name', 'email']
+        fields = ['full_name', 'email', 'location', 'bio']
 
 
 class CommentForm(forms.ModelForm):

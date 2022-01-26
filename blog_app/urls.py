@@ -10,7 +10,6 @@ urlpatterns = [
     path('delete_blog/<str:slug>/', views.delete_blog, name='delete_post'),
     path('edit_post/<str:slug>/', views.edit_blog, name='edit_post'),
     path('read_post/<str:slug>/', views.read_post, name='read_post'),
-    path('profile/', views.ProfilePage.as_view(), name='profile'),
     path('edit_profile/<int:pk>/', views.EditProfile.as_view(), name='edit_profile'),
     path('my_post/<str:slug>/', views.MyPost.as_view(), name='my_post'),
     path('author/<str:pk>/', views.Author.as_view(), name='author'),

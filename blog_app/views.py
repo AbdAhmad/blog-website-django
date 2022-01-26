@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth.models import User, auth
+from django.contrib.auth.models import User
 from .forms import BlogForm, EditProfileForm, CommentForm
 from .models import Blog, Profile, Comment, Like
 from django.contrib import messages
@@ -109,16 +109,6 @@ class MyPost(LoginRequiredMixin, DetailView):
     context_object_name = 'post'
 
 
-class ProfilePage(LoginRequiredMixin, View):
-
-    def get(self, request, *args, **kwargs):
-        user = self.request.user
-        posts = Blog.objects.filter(author=user)
-        posts_count = posts.count()
-        profile = Profile.objects.get(user=user)
-        return render(request, 'blog_app/profile.html', {'user': user, 'posts_count': posts_count, 'profile': profile})
-
-
 class EditProfile(LoginRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
@@ -133,17 +123,27 @@ class EditProfile(LoginRequiredMixin, View):
         if form.is_valid():
             form.save()
             messages.success(request, 'Profile updated successfully')
-            return redirect('profile')            
+            return redirect('author', pk=request.user)            
         return render(request, 'blog_app/edit_profile.html', {'form': form, 'profile': profile})
 
 
 class Author(LoginRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
+        is_authorized = False
         user = User.objects.get(username=kwargs['pk'])
+        if str(user.username) == str(request.user):
+            is_authorized = True
+        profile = Profile.objects.get(user=user)
         posts = Blog.objects.filter(author=user)
         posts_count = posts.count()
-        return render(request, 'blog_app/author.html', {'posts_count': posts_count,'user': user})
+        context = {
+            'profile': profile,
+            'posts_count': posts_count,
+            'user': user,
+            'is_authorized': is_authorized
+        }
+        return render(request, 'blog_app/author.html', context)
 
 
 class AuthorPosts(LoginRequiredMixin, View):

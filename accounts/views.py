@@ -18,7 +18,7 @@ def signup(request):
             new_user = authenticate(username=username,password=password1,)
             login(request, new_user)
             messages.info(request, "Thanks for registering. You are now logged in.")
-            return redirect("questions")
+            return redirect("posts")
         else:
             messages.error(request, 'Please provide valid credentials')
             return redirect('signup')

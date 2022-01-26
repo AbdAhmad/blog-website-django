@@ -5,51 +5,51 @@
 {% block content %}  
 {% if posts %} 
 
-        <div class="col-md-12">
-            <form action="{% url 'search' %}" class="card card-sm" method="POST">
-                {% csrf_token %}
-                <div class="card-body row no-gutters align-items-center">
-                    <div class="col">
-                        <input class="form-control" type="search" placeholder="Search" name="search">
-                    </div>
-                    <div class="col-auto">
-                        <button class="btn btn-primary" type="submit">Search</button>
-                    </div>
+    <div class="col-md-12">
+        <form action="{% url 'search' %}" class="card card-sm" method="POST">
+            {% csrf_token %}
+            <div class="card-body row no-gutters align-items-center">
+                <div class="col">
+                    <input class="form-control" type="search" placeholder="Search" name="search">
                 </div>
-            </form>
-
-                <div class="card mt-1">
-                    {% for post in posts %}   
-                    <div class="card-header">
-                        <div class="card-title">
-                            <a href="{% url 'read_post' post.slug %}" class="blog-title"><h5>{{ post.title }}</h5></a>
-                        </div>
-                    </div>
-                    <div class="card-body">        
-                        <a href="{% url 'read_post' post.slug %}">{{post.content|slice:"290"}} {% if post.content|length > 290 %}...{% endif %}</a>                       
-                    </div>
-                    <div class="px-4">{{post.views}} Views</div>
-                    <div class="px-4 blog-created-div">
-                        <p >Posted on {{ post.created_at }} by <a href="{% url 'author' post.author.username %}">{{ post.author }}</a></p>
-                    </div>
-                    <hr>
-                    {% endfor %}
+                <div class="col-auto">
+                    <button class="btn btn-primary" type="submit">Search</button>
                 </div>
             </div>
-    {% else %}
-        <br>
+        </form>
 
-             <div class="col-md-6 offset-md-3">
-                 <div class="card"> 
-                     <div class="card-header text-white bg-dark">
-                         <div class="card-title offset-md-1">
-                              <h2>
-                            <h2>{{ user.username }} haven't posted yet</h2>
-                      </h2>
-                         </div>
-                     </div>
-                 </div>
-             </div>
+        <div class="card mt-1">
+            {% for post in posts %}   
+            <div class="card-header">
+                <div class="card-title">
+                    <a href="{% url 'read_post' post.slug %}" class="blog-title"><h5>{{ post.title }}</h5></a>
+                </div>
+            </div>
+            <div class="card-body">        
+                <a href="{% url 'read_post' post.slug %}">{{post.content|slice:"290"}} {% if post.content|length > 290 %}...{% endif %}</a>                       
+            </div>
+            <div class="px-4">{{post.views}} Views</div>
+            <div class="px-4 blog-created-div">
+                <p >Posted on {{ post.created_at }} by <a href="{% url 'author' post.author.username %}">{{ post.author }}</a></p>
+            </div>
+            <hr>
+            {% endfor %}
+        </div>
+    </div>
+    {% else %}
+    
+    <br>
+    <div class="col-md-6 offset-md-3">
+        <div class="card"> 
+            <div class="card-header text-white bg-dark">
+                <div class="card-title offset-md-1">
+                    <h2>
+                <h2>{{ user.username }} haven't posted yet</h2>
+            </h2>
+                </div>
+            </div>
+        </div>
+    </div>
     
     {% endif %}    
 {% endblock %}

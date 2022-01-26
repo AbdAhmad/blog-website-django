@@ -6,21 +6,21 @@
 
 {% block content %}
 
-            <div class="col-md-12">
-                <div class="card">
-                    <form method="post">
-                        {% csrf_token %}
-                        <div class="card-body">        
-                                {{ post.title|as_crispy_field }}
-                        </div>
-                        <div class="card-body">        
-                                {{ post.content|as_crispy_field }}   
-                        </div>
-                    <div class="d-grid gap-2 p-2">
-                        <button class="btn btn-outline-primary" type="submit">Post</button> 
-                    </div>
-                    </form>
+    <div class="col-md-12">
+        <div class="card">
+            <form method="post">
+                {% csrf_token %}
+                <div class="card-body">        
+                        {{ post.title|as_crispy_field }}
                 </div>
+                <div class="card-body">        
+                        {{ post.content|as_crispy_field }}   
+                </div>
+            <div class="d-grid gap-2 p-2">
+                <button class="btn btn-outline-primary" type="submit">Post</button> 
             </div>
+            </form>
+        </div>
+    </div>
        
 {% endblock %}

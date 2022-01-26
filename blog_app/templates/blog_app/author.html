@@ -5,27 +5,37 @@
 {% load static %}
 {% block content %}
 
-        <div class="col-md-6 offset-md-3">
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-title offset-md-3">
-                        <h4 class="col-md-12 offset-md-2">{{ user.username }}</h4> 
-                    </div>
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title text-center">
+                    <h3>{{ user.username }}</h3> 
                 </div>
-                <div class="card-body"> 
-                        <h6><img src="{% static 'id-card.png' %}" height="25px" width="25px"> {{ user.first_name }}</h6>
-                        <h6><img src="{% static 'gmail.jpg' %}" height="30px" width="30px"> {{ user.email }}</h6>
-                {% if user.profile.location is not None or profile.bio is not None %}
-                        <h6><img src="{% static 'location.jpg' %}" height="25px" width="25px"> {{ user.profile.location }}</h6>
-                        <h6><img src="{% static 'bio.png' %}" height="25px" width="25px"> {{ user.profile.bio }}</h6>
-                </div>
-                {% endif %}
-           </div>
-           <form action="{% url 'author_posts' user.username %}">
-            <div class="d-grid gap-2">
-                <button class="btn btn-dark">Blogs by {{ user.username }} : {{ posts_count }}</button> 
             </div>
-            </form>
-      </div>
+            <div class="card-body"> 
+                    <h6><img src="{% static 'id-card.png' %}" height="25px" width="25px"> {{ profile.full_name }}</h6>
+                    <h6><i class="fa fa-envelope" style="font-size:24px"> {{ profile.email }}</i> </h6>
+            {% if user.profile.location is not None or profile.bio is not None %}
+                    <h6><i class="fa fa-map-marker" style="font-size:24px"> {{ profile.location }}</i></h6>
+                    <h6><img src="{% static 'bio.png' %}" height="25px" width="25px"> {{ profile.bio }}</h6>
+                    <h6>Joined: {{ profile.date_joined }}</h6>
+            </div>
+            {% endif %}
+            <div class="p-3">
+                {% if is_authorized %}
+                <form action="{% url 'edit_profile' profile.id %}">
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-primary">Add more info</button> 
+                    </div>
+                </form>
+                {% endif %}
+                <form action="{% url 'author_posts' user.username %}">
+                <div class="d-grid gap-2 mt-1">
+                    <button class="btn btn-secondary">Blogs by {{ user.username }} : {{ posts_count }}</button> 
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
 {% endblock %}

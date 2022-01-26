@@ -26,13 +26,7 @@
           <a class="nav-link text-white" href="{% url 'post' %}">Post</a>
           <a class="nav-link text-white" href="{% url 'my_posts' %}">My Posts</a>
           <a class="nav-link text-white" href="{% url 'logout' %}">Logout</a>
-          <!-- Converting the name into a list -->
-          {% with full_name=request.user.first_name.split %}
-          <!-- Fetching only the first name from the list -->
-          {% for name in full_name|slice:":1" %}
-          <a class="nav-link text-white" href="{% url 'profile' %}"> Welcome {{ name }}</a>
-          {% endfor %}
-          {% endwith %}        
+          <a class="nav-link text-white" href="{% url 'author' user.username %}">{{ user.username }}</a>   
           {% endif %}
         </div>
       </div>
