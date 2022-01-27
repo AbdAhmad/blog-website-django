@@ -3,16 +3,16 @@ from . import views
 
 urlpatterns = [
     path('', views.Welcome.as_view(), name='welcome'),
-    path('post/', views.CreateBlog.as_view(), name='post'),
-    path('posts/', views.Posts.as_view(), name='posts'),
+    path('write_blog/', views.create_blog, name='write_blog'),
+    path('blogs/', views.blogs, name='blogs'),
     path('like_blog/<str:slug>', views.like_blog, name='like_blog'),
-    path('my_posts/', views.MyPosts.as_view(), name='my_posts'),
-    path('delete_blog/<str:slug>/', views.delete_blog, name='delete_post'),
-    path('edit_post/<str:slug>/', views.edit_blog, name='edit_post'),
-    path('read_post/<str:slug>/', views.read_post, name='read_post'),
-    path('edit_profile/<int:pk>/', views.EditProfile.as_view(), name='edit_profile'),
-    path('my_post/<str:slug>/', views.MyPost.as_view(), name='my_post'),
+    path('my_blogs/', views.my_blogs, name='my_blogs'),
+    path('delete_blog/<str:slug>/', views.delete_blog, name='delete_blog'),
+    path('update_blog/<str:slug>/', views.update_blog, name='update_blog'),
+    path('read_blog/<str:slug>/', views.read_blog, name='read_blog'),
+    path('update_profile/<int:pk>/', views.UpdateProfile.as_view(), name='update_profile'),
+    path('my_blog/<str:slug>/', views.MyBlog.as_view(), name='my_blog'),
     path('author/<str:pk>/', views.Author.as_view(), name='author'),
-    path('author_posts/<str:username>/', views.AuthorPosts.as_view(), name="author_posts"),
-    path('search/', views.Search.as_view(), name="search")
+    path('author_blogs/<str:username>/', views.author_blogs, name="author_posts"),
+    path('search_blogs/', views.search_blogs, name="search_blogs")
 ]

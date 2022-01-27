@@ -12,78 +12,38 @@ from django.contrib.auth.decorators import login_required
 
 
 class Welcome(TemplateView):
-    template_name = 'blog_app/index.html'
-
-
-class CreateBlog(LoginRequiredMixin, View):
-
-    def get(self, request, *args, **kwargs):
-        post = BlogForm()
-        context = {
-            'post': post
-            }
-        return render(request, 'blog_app/post.html', context)
-
-    def post(self, request, *args, **kwargs):
-        post = BlogForm(data=request.POST)
-        if post.is_valid():
-            post = post.save(commit = False)
-            post.author = request.user
-            post.save()
-            messages.success(request, 'Blog added successfully')
-            return redirect('post')            
-        return render(request, 'blog_app/post.html', {'post': post})
+    template_name = 'blog_app/welcome.html'
 
 
 @login_required
-def edit_blog(request, slug):
-    post = Blog.objects.get(slug=slug)
+def create_blog(request):
     if request.method == 'POST':
-        post = BlogForm(request.POST, instance=post)
-        if post.is_valid():
-            post = post.save(commit = False)
-            post.author = request.user
-            post.save()
-            messages.success(request, 'Blog updated successfully')
-            return redirect('my_post', slug=slug)            
+        blog_form = BlogForm(data=request.POST)
+        if blog_form.is_valid():
+            blog = blog_form.save(commit = False)
+            blog.author = request.user
+            blog.save()
+            messages.success(request, 'Blog created successfully')
+            return redirect('read_blog', slug=blog.slug)            
     else:
-        post = BlogForm(instance=post)
-    return render(request, 'blog_app/post.html', {'post': post})
-
-
-class Posts(LoginRequiredMixin, ListView):
-
-    model = Blog
-    context_object_name = 'posts'
-    template_name = 'blog_app/posts.html'
-    queryset = Blog.objects.all().order_by('-created_at')
-
-
-class MyPosts(LoginRequiredMixin, ListView):
-
-    model = Blog
-    context_object_name = 'posts'
-    template_name = 'blog_app/my_posts.html'  
-    def get_queryset(self):
-        return Blog.objects.filter(author=self.request.user).order_by('-created_at')
- 
-
-@login_required
-def delete_blog(request, slug):
-    blog = Blog.objects.get(slug=slug)
-    blog.delete()
-    messages.success(request, 'Blog Deleted')
-    return redirect('my_posts')
+        blog_form = BlogForm()
+        context = {
+            'blog_form': blog_form
+            }
+    return render(request, 'blog_app/write_blog.html', context)
 
 
 @login_required
-def read_post(request, slug):
+def read_blog(request, slug):
     blog = Blog.objects.get(slug=slug)
     comments = Comment.objects.filter(blog=blog)
     blog.views = blog.views + 1
     likes = Like.objects.filter(blog=blog).count()
     blog.likes = likes
     blog.save()
+    is_authorized = False
+    if blog.author == request.user:
+        is_authorized = True
     if request.method == 'POST':
         comment_form = CommentForm(data=request.POST)
         if comment_form.is_valid():
@@ -92,39 +52,120 @@ def read_post(request, slug):
             comment.blog = blog
             comment.save()
             messages.success(request, 'Comment added')
-        return redirect('read_post', slug=blog.slug)
+        return redirect('read_blog', slug=blog.slug)
     comment_form = CommentForm()
     context = {
         'blog': blog,
         'comment_form': comment_form,
-        'comments': comments
+        'comments': comments,
+        'is_authorized': is_authorized
     }
-    return render(request, 'blog_app/read_post.html', context)
+    return render(request, 'blog_app/read_blog.html', context)
 
 
-class MyPost(LoginRequiredMixin, DetailView):
+@login_required
+def update_blog(request, slug):
+    blog = Blog.objects.get(slug=slug)
+    if request.method == 'POST':
+        blog_form = BlogForm(request.POST, instance=blog)
+        if blog_form.is_valid():
+            blog = blog_form.save(commit = False)
+            blog.author = request.user
+            blog.save()
+            messages.success(request, 'Blog updated successfully')
+            return redirect('my_blog', slug=slug)            
+    else:
+        blog_form = BlogForm(instance=blog)
+    return render(request, 'blog_app/write_blog.html', {'blog_form': blog_form})
+
+
+@login_required
+def blogs(request):
+    if request.GET and ('q' in request.GET) and request.GET['q'] == 'latest':
+        blogs = Blog.objects.all().order_by('-created_at')
+        marked = 'latest'
+    else:
+        blogs = Blog.objects.all().order_by('-views')
+        marked = 'mostviewed'
+    
+    context = {
+        'blogs': blogs,
+        'marked': marked,
+        'page_title': 'Blogs'
+    }
+
+    return render(request, 'blog_app/blogs.html', context)
+
+
+@login_required
+def my_blogs(request):
+    if request.GET and ('q' in request.GET) and request.GET['q'] == 'latest':
+        blogs = Blog.objects.filter(author=request.user).order_by('-created_at')
+        marked = 'latest'
+    else:
+        blogs = Blog.objects.filter(author=request.user).order_by('-views')
+        marked = 'mostviewed'
+    
+    context = {
+        'blogs': blogs,
+        'marked': marked,
+        'page_title': 'My Blogs'
+    }
+
+    return render(request, 'blog_app/blogs.html', context)
+
+
+@login_required
+def author_blogs(request, username):
+    user = User.objects.get(username=username)
+    if request.GET and ('q' in request.GET) and request.GET['q'] == 'latest':
+        blogs = Blog.objects.filter(author=user).order_by('-created_at')
+        marked = 'latest'
+    else:
+        blogs = Blog.objects.filter(author=user).order_by('-views')
+        marked = 'mostviewed'
+
+    context = {
+        'blogs': blogs,
+        'marked': marked,
+        'page_title': 'Author Blogs'
+    }
+
+    return render(request, 'blog_app/blogs.html', context)
+
+ 
+
+@login_required
+def delete_blog(request, slug):
+    blog = Blog.objects.get(slug=slug)
+    blog.delete()
+    messages.success(request, 'Blog Deleted')
+    return redirect('my_blogs')
+
+
+class MyBlog(LoginRequiredMixin, DetailView):
     
     model = Blog
     template_name = 'blog_app/my_post.html'
-    context_object_name = 'post'
+    context_object_name = 'blog'
 
 
-class EditProfile(LoginRequiredMixin, View):
+class UpdateProfile(LoginRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
         profile = Profile.objects.get(id=kwargs['pk'])
         form = EditProfileForm(instance=profile)
         context = {'form': form, 'profile': profile}
-        return render(request, 'blog_app/edit_profile.html', context)
+        return render(request, 'blog_app/update_profile.html', context)
 
     def post(self, request, *args, **kwargs):
         profile = Profile.objects.get(id=kwargs['pk'])
-        form = EditProfileForm(request.POST, instance=profile)
+        form = EditProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
             form.save()
             messages.success(request, 'Profile updated successfully')
             return redirect('author', pk=request.user)            
-        return render(request, 'blog_app/edit_profile.html', {'form': form, 'profile': profile})
+        return render(request, 'blog_app/update_profile.html', {'form': form, 'profile': profile})
 
 
 class Author(LoginRequiredMixin, View):
@@ -146,20 +187,12 @@ class Author(LoginRequiredMixin, View):
         return render(request, 'blog_app/author.html', context)
 
 
-class AuthorPosts(LoginRequiredMixin, View):
-
-    def get(self, request, *args, **kwargs):
-        user = User.objects.get(username=kwargs['username'])
-        posts = Blog.objects.filter(author=user).order_by('-created_at')
-        return render(request, 'blog_app/author_posts.html', {'posts': posts,'user': user})
-    
-
-class Search(LoginRequiredMixin, View):
-
-    def post(self, request, *args, **kwargs):
-        searched_post = request.POST['search']
-        posts = Blog.objects.filter(title__icontains=searched_post)
-        return render(request, 'blog_app/posts.html', {'posts': posts})
+@login_required
+def search_blogs(request):
+    if request.method == 'POST':
+        searched_post = request.POST['search_blogs']
+        blogs = Blog.objects.filter(title__icontains=searched_post)
+        return render(request, 'blog_app/blogs.html', {'blogs': blogs})
 
 
 @login_required
@@ -179,4 +212,4 @@ def like_blog(request, slug):
         like = Like(like=True, user=user, blog=blog)
         like.save()
         messages.success(request, 'You have liked this post')
-    return redirect('read_post', slug=slug)
+    return redirect('read_blog', slug=slug)

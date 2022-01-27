@@ -45,6 +45,7 @@ class Profile(models.Model):
     email = models.EmailField(max_length=254, blank=True, null=True)
     location = models.CharField(max_length=100, blank=True, null=True)
     bio = models.TextField(blank=True, null=True)
+    profile_pic = models.ImageField(upload_to='profile_pics',  blank=True, null=True)
     blogs = models.ManyToManyField(Blog, blank=True)
     date_joined = models.DateTimeField(auto_now_add=True, blank=True, null=True)
 

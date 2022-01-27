@@ -1,0 +1,31 @@
+{% extends 'blog_app/base.html' %}
+{% load static %}
+
+{% block title %} Welcome {% endblock %}
+
+{% block content %}
+
+    <div class="col-md-6 offset-md-3">
+        <div class="card"> 
+            <div class="card-body">
+                <div class="text-center"><h3>Welcome</h3></div>
+                    <img src="{% static 'bg_image.jpg' %}" height="50%" width="100%"> 
+                    <br>
+                    {% if user.is_authenticated %}
+                    <div class="d-grid gap-2">
+                        <a href="/write_blog" class="btn btn-outline-success">Start Writing</a>
+                    </div> 
+                    {% else %}
+                                
+                    <div class="d-grid gap-2">
+                        <a href="/signup" class="btn btn-outline-success">Signup</a>
+                    </div> 
+                    <div class="d-grid gap-2 top_margin">
+                        <a href="/login" class="btn btn-outline-primary">Login</a>
+                    </div> 
+                    {% endif %}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

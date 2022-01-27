@@ -41,7 +41,7 @@ def login_user(request):
         if user is not None:
             login(request, user)
             messages.success(request, 'Welcome ' + username)
-            return redirect('/posts')
+            return redirect('blogs')
         else:
             messages.error(request, 'Please provide valid credentials')
             

@@ -1,23 +1,23 @@
 {% extends 'blog_app/base.html' %}
 {% load crispy_forms_tags %}
-{% crispy post post.helper %}
+{% crispy blog_form blog_form.helper %}
 
-{% block title %} Write Something {% endblock %}
+{% block title %} Write Blog {% endblock %}
 
 {% block content %}
 
     <div class="col-md-12">
         <div class="card">
-            <form method="post">
+            <form method="POST">
                 {% csrf_token %}
                 <div class="card-body">        
-                        {{ post.title|as_crispy_field }}
+                        {{ blog_form.title|as_crispy_field }}
                 </div>
                 <div class="card-body">        
-                        {{ post.content|as_crispy_field }}   
+                        {{ blog_form.content|as_crispy_field }}   
                 </div>
             <div class="d-grid gap-2 p-2">
-                <button class="btn btn-outline-primary" type="submit">Post</button> 
+                <button class="btn btn-outline-success" type="submit">Publish</button> 
             </div>
             </form>
         </div>

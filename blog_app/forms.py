@@ -18,6 +18,7 @@ class BlogForm(forms.ModelForm):
     content = forms.CharField( 
         widget=forms.Textarea(
             attrs={
+                'rows': 15,
                 'placeholder': 'Tell your story...'
             }
         )
@@ -68,7 +69,7 @@ class EditProfileForm(forms.ModelForm):
 
     class Meta:
         model = Profile
-        fields = ['full_name', 'email', 'location', 'bio']
+        fields = ['full_name', 'email', 'location', 'bio', 'profile_pic']
 
 
 class CommentForm(forms.ModelForm):
@@ -88,6 +89,3 @@ class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
         fields = ['comment']
-
-
-         

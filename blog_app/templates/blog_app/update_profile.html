@@ -20,12 +20,14 @@
                         <br>
                         {{ form.email|as_crispy_field }}
                         <br>
+                        {{ form.profile_pic|as_crispy_field }}
+                        <br>
                         {{ form.bio|as_crispy_field }}
                         <br>
                         {{ form.location|as_crispy_field }}
                         <br>
                     <div class="d-grid gap-2 top_margin">
-                        <button class="btn btn-primary" type="submit">Update Profile</button>
+                        <button class="btn btn-outline-primary" type="submit">Update Profile</button>
                     </div>
                 </form>
             </div>

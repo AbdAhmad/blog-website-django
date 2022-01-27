@@ -14,19 +14,50 @@
     <link rel="stylesheet" href="{% static 'css/blog_app.css' %}">
     <script src="{% static 'js/main.js' %}"></script>
 </head>
-{% if user.is_authenticated %}
-<nav class="navbar navbar-expand-lg">
+
+<nav class="navbar navbar-expand-lg bg-dark">
     <div class="container-fluid">
-          <a class="navbar-brand text-white" href="{% url 'posts' %}">Blogs</a>
+      <a href="{% url 'blogs' %}">
+        <span class="big-dot"></span> 
+      </a>
+      <a href="{% url 'blogs' %}">
+        <span class="small-dot"></span>
+      </a>
+         <h4 class="p-2"><a class="navbar-brand text-white" href="{% url 'blogs' %}">Blogs</a></h4>
       <button class="navbar-toggler navbar-dark" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-        <div class="navbar-nav">
-          <a class="nav-link text-white" href="{% url 'post' %}">Post</a>
-          <a class="nav-link text-white" href="{% url 'my_posts' %}">My Posts</a>
-          <a class="nav-link text-white" href="{% url 'logout' %}">Logout</a>
-          <a class="nav-link text-white" href="{% url 'author' user.username %}">{{ user.username }}</a>   
+      
+      <div class="collapse justify-content-end navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav p-2">
+          {% if user.is_authenticated %}
+
+          <!-- Search bar -->
+          
+          <div class="search-container">
+            <form action="{% url 'search_blogs' %}" method="POST" class=" mt-1">
+              {% csrf_token %}
+              <input class="search expandright" id="searchright" type="search" name="search_blogs" placeholder="Search">
+              <label class="button searchbutton" for="searchright"><span class="mglass">&#9906;</span></label>
+            </form>
+          </div>
+          <h6><a class="nav-link text-white mt-3" href="{% url 'write_blog' %}">Start Writing</a></h6>
+          <h6><a class="nav-link text-white mt-3" href="{% url 'my_blogs' %}">My Blogs</a></h6>
+          <div class="dropdown dropstart">
+            <a class="text-white mt-4 mx-3" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+              <span>
+                <img src="{{ user.profile.profile_pic.url }}" width="20px" height="20px" style="border-radius: 50%;"/>
+                <h6>{{ user.username }}</h6>
+              </span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+              <li><a class="dropdown-item" href="{% url 'author' user.username %}">View Profile</a></li>
+              <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+            </ul>
+          </div>
+          {% else %}
+          <h6><a class="nav-link text-white mt-3" href="{% url 'login' %}">Log in</a></h6>
+          <h6><a class="nav-link text-white mt-3" href="{% url 'signup' %}">Sign up</a></h6>
           {% endif %}
         </div>
       </div>
@@ -55,17 +86,116 @@
 
 </body>
 </html>
-<style>
-  body{
-    background-image: url({% static 'bg_image.jpg' %});
-    background-size: cover;
-    background-position: bottom;
-        background-repeat: repeat;
-        height: 50vh;
-        width: 100%;
-  }
-</style>
 
+<style>
+  .big-dot {
+  height: 30px;
+  width: 30px;
+  background-color: #fff;
+  border-radius: 50%;
+  display: inline-block;
+}
+.small-dot {
+  height: 20px;
+  width: 20px;
+  background-color: #fff;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.button {
+	display: inline-block;
+	margin: 4px 2px;
+	font-size: 14px;
+	padding-left: 32px;
+	padding-right: 32px;
+	height: 50px;
+	line-height: 50px;
+	text-align: center;
+	color: white;
+	text-decoration: none;
+	cursor: pointer;
+	-moz-user-select: none;
+	-khtml-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.button:hover {
+	transition-duration: 0.4s;
+	-moz-transition-duration: 0.4s;
+	-webkit-transition-duration: 0.4s;
+	-o-transition-duration: 0.4s;
+	background-color: white;
+	color: black;
+}
+
+.search-container {
+	position: relative;
+	display: inline-block;
+	margin: 4px 2px;
+	height: 50px;
+	width: 50px;
+	vertical-align: bottom;
+}
+
+.mglass {
+	display: inline-block;
+	pointer-events: none;
+	-webkit-transform: rotate(-45deg);
+	-moz-transform: rotate(-45deg);
+	-o-transform: rotate(-45deg);
+	-ms-transform: rotate(-45deg);
+}
+
+.searchbutton {
+	position: absolute;
+	font-size: 22px;
+	width: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+.search:focus + .searchbutton {
+	transition-duration: 0.4s;
+	-moz-transition-duration: 0.4s;
+	-webkit-transition-duration: 0.4s;
+	-o-transition-duration: 0.4s;
+	background-color: white;
+	color: black;
+}
+
+.search {
+	position: absolute;
+	left: 49px; /* Button width-1px (Not 50px/100% because that will sometimes show a 1px line between the search box and button) */
+	background-color: white;
+	outline: none;
+	border: none;
+	padding: 0;
+	width: 0;
+	height: 100%;
+	z-index: 10;
+	transition-duration: 0.4s;
+	-moz-transition-duration: 0.4s;
+	-webkit-transition-duration: 0.4s;
+	-o-transition-duration: 0.4s;
+}
+
+.search:focus {
+	width: 363px; /* Bar width+1px */
+	padding: 0 16px 0 0;
+}
+
+.expandright {
+	left: auto;
+	right: 49px; /* Button width-1px */
+}
+
+.expandright:focus {
+	padding: 0 0 0 16px;
+}
+</style>
 <script>
   var message_ele = document.getElementById("message_container");
 
