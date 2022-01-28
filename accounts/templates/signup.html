@@ -6,19 +6,15 @@
 {% block content %}
 
     <div class="col-md-12">
-        <div class="card">
-            <div class="card-body">
-                <div class="text-center"><h3>Sign up</h3></div>
-                <form autocomplete="off" method="post">
-                    {% csrf_token %}
-                    {{form|crispy}}
-                    <div class="d-grid gap-2">
-                        <button class="btn btn-outline-success" type="submit">Sign up</button>
-                    </div>
-                </form>
-                <p class="text-center p-tag">Already have an account?  <a href="{% url 'login' %}">Log in</a></a></p>
+        <div class="text-center"><h3>Sign up</h3></div>
+        <form autocomplete="off" method="post">
+            {% csrf_token %}
+            {{form|crispy}}
+            <div class="d-grid gap-2">
+                <button class="btn btn-outline-success" type="submit">Sign up</button>
             </div>
-        </div>
+        </form>
+        <p class="text-center p-tag">Already have an account?  <a href="{% url 'login' %}">Log in</a></a></p>
     </div>
 
 {% endblock %}

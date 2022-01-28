@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
+from django.template import context
 from .forms import BlogForm, EditProfileForm, CommentForm
 from .models import Blog, Profile, Comment, Like
 from django.contrib import messages
@@ -73,7 +74,7 @@ def update_blog(request, slug):
             blog.author = request.user
             blog.save()
             messages.success(request, 'Blog updated successfully')
-            return redirect('my_blog', slug=slug)            
+            return redirect('my_blog', slug=slug)           
     else:
         blog_form = BlogForm(instance=blog)
     return render(request, 'blog_app/write_blog.html', {'blog_form': blog_form})
@@ -134,7 +135,6 @@ def author_blogs(request, username):
     return render(request, 'blog_app/blogs.html', context)
 
  
-
 @login_required
 def delete_blog(request, slug):
     blog = Blog.objects.get(slug=slug)
@@ -148,6 +148,36 @@ class MyBlog(LoginRequiredMixin, DetailView):
     model = Blog
     template_name = 'blog_app/my_post.html'
     context_object_name = 'blog'
+
+
+@login_required
+def my_blog(request, slug):
+    blog = Blog.objects.get(slug=slug)
+    comments = Comment.objects.filter(blog=blog)
+    blog.views = blog.views + 1
+    likes = Like.objects.filter(blog=blog).count()
+    blog.likes = likes
+    blog.save()
+    is_authorized = False
+    if blog.author == request.user:
+        is_authorized = True
+    if request.method == 'POST':
+        comment_form = CommentForm(data=request.POST)
+        if comment_form.is_valid():
+            comment = comment_form.save(commit=False)
+            comment.user = request.user
+            comment.blog = blog
+            comment.save()
+            messages.success(request, 'Comment added')
+        return redirect('read_blog', slug=blog.slug)
+    comment_form = CommentForm()
+    context = {
+        'blog': blog,
+        'comment_form': comment_form,
+        'comments': comments,
+        'is_authorized': is_authorized
+    }
+    return render(request, 'blog_app/read_blog.html', context)
 
 
 class UpdateProfile(LoginRequiredMixin, View):
@@ -190,9 +220,14 @@ class Author(LoginRequiredMixin, View):
 @login_required
 def search_blogs(request):
     if request.method == 'POST':
-        searched_post = request.POST['search_blogs']
-        blogs = Blog.objects.filter(title__icontains=searched_post)
-        return render(request, 'blog_app/blogs.html', {'blogs': blogs})
+        searched_blogs = request.POST['search_blogs']
+        print(searched_blogs)
+        blogs = Blog.objects.filter(title__icontains=searched_blogs)
+        context = {
+            'blogs': blogs,
+            'searched_blogs': searched_blogs
+        }
+        return render(request, 'blog_app/blogs.html', context)
 
 
 @login_required

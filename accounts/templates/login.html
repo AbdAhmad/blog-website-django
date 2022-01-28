@@ -6,19 +6,15 @@
 {% block content %}  
 
     <div class="col-md-12">
-        <div class="card">
-            <div class="card-body">
-                <div class="text-center"><h3>Log in</h3></div>
-                <form method="post">
-                    {% csrf_token %}
-                    {{ form|crispy }}
-                    <div class="d-grid gap-2">
-                        <button class="btn btn-outline-primary" type="submit">Log in</button>
-                    </div>
-                </form>
-                <p class="text-center p-tag">Don't have an account?  <a href="{% url 'signup' %}">Sign up</a></p> 
+        <div class="text-center"><h3>Log in</h3></div>
+        <form method="post">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <div class="d-grid gap-2">
+                <button class="btn btn-outline-primary" type="submit">Log in</button>
             </div>
-        </div>
+        </form>
+        <p class="text-center p-tag">Don't have an account?  <a href="{% url 'signup' %}">Sign up</a></p>    
     </div>
 
 {% endblock %}

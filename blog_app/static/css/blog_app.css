@@ -2,14 +2,6 @@
         display: none;
 }
 
-.top_margin{
-    margin-top: 2px;
-}
-
-.input_padding{
-    padding-left: 10px;
-}
-
 .profile_pic {
     border-radius: 50%;
 }
@@ -17,6 +9,16 @@
 pre {
     white-space: pre-wrap; 
     word-break: break-word;
+}
+
+.fa-heart-o {
+  color: red;
+  cursor: pointer;
+}
+
+.fa-heart {
+  color: red;
+  cursor: pointer;
 }
 
 .blog-title {
@@ -38,6 +40,16 @@ pre {
 .blog-created-div {
     display: flex; 
     flex-direction: row-reverse;
+}
+
+.profile_icon {
+    display: flex;
+}
+
+.published-date {
+    color: grey; 
+    font-style: italic; 
+    font-size: 15px;
 }
 
 /* Pagination Nav CSS */
@@ -178,3 +190,4 @@ pre {
   .expandright:focus {
       padding: 0 0 0 16px;
   }
+

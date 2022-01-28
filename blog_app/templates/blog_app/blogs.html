@@ -6,58 +6,36 @@
  
 {% if blogs %} 
 
-        <div class="col-md-12"> 
-            <nav>
-                <ul class="pagination pagination-sm justify-content-center"> 
-                    <li class="page-item {% if marked == 'latest' %} active {% endif %}"><a class="page-link" href="?q=latest">Latest</a>
-                    <li class="page-item {% if marked == 'mostviewed' %} active {% endif %}"><a class="page-link" href="?q=mostviewed">Most Popular</a>
-                </ul>
-            </nav>
-            <div class="card mt-1">
-                {% for blog in blogs %}   
-                <div class="card-body"> 
-                    <div class="mb-3">
-                        <img src="{{ blog.author.profile.profile_pic.url }}" width="20px" height="20px" style="border-radius: 50%;" />
-                        <a class="mx-2" href="{% url 'author' blog.author.username %}"> {{ blog.author }}</a>
-                    </div>
-                    <a href="{% url 'read_blog' blog.slug %}" class="blog-title"><h4>{{ blog.title }}</h4></a>
-                    <a href="{% url 'read_blog' blog.slug %}" class="blog-content">{{ blog.content|slice:"290" }} {% if blog.content|length > 290 %}...{% endif %}</a>                       
-                </div>
-                    <div class="px-4">
-                        <i class="fa fa-eye" style="color:rgb(54, 48, 48)"> {{blog.views}}</i>
-                        <i class="fa fa-heart mx-2" style="color:rgb(184, 10, 10)"> {{blog.likes}}</i>
-                    </div>
-                <div class="px-4 blog-created-div">
-                    <p style='color: grey'>Posted on {{ blog.created_at|date:"M d, Y" }}</p>
-                </div>
-                <br>
-                {% endfor %}
-            </div>
+    <div class="col-md-12"> 
+        <nav>
+            <ul class="pagination pagination-sm justify-content-center"> 
+                <li class="page-item {% if marked == 'latest' %} active {% endif %}"><a class="page-link" href="?q=latest">Latest</a>
+                <li class="page-item {% if marked == 'mostviewed' %} active {% endif %}"><a class="page-link" href="?q=mostviewed">Most Popular</a>
+            </ul>
+        </nav>
+        {% for blog in blogs %}   
+        <div class="mb-3">
+            <a href="{% url 'author' blog.author.username %}">
+                <img src="{{ blog.author.profile.profile_pic.url }}" width="20px" height="20px" style="border-radius: 50%;" />
+            </a>
+            <a class="mx-2" href="{% url 'author' blog.author.username %}"> {{ blog.author }}</a>
         </div>
-  
-    {% else %}
-
-    <br>
-    <div class="col-md-6 offset-md-3">
-        <div class="card"> 
-            <div class="card-header text-white bg-dark">
-                <div class="card-title offset-md-1">
-                    <h2>
-                <h2>No blogs to show</h2>
-            </h2>
-                </div>
-            </div>
-            <div class="card-body">        
-            <form action="{% url 'write_blog' %}">
-                <div class="d-grid gap-2">
-                <button class="btn btn-primary" type="submit">Post Blog</button>
-                </div> 
-            </form> 
-            </div>
+        <a href="{% url 'read_blog' blog.slug %}" class="blog-title"><h4>{{ blog.title }}</h4></a>
+        <a href="{% url 'read_blog' blog.slug %}" class="blog-content">{{ blog.content|slice:"290" }} {% if blog.content|length > 290 %}...{% endif %}</a>                       
+        <div>
+            <i class="fa fa-heart" style="color:rgb(184, 10, 10)"> {{blog.likes}}</i>
+            <i class="fa fa-eye" style="color:rgb(54, 48, 48)"> {{blog.views}}</i>
         </div>
+        <div class="px-4 blog-created-div">
+            <p class="published-date">{{ blog.created_at|date:"M d, Y" }}</p>
+        </div>
+        {% endfor %}
     </div>
-
+    {% else %}
+    <div class="col-md-6 offset-md-3 text-center">
+        <h1>{{ searched_blogs }}</h1>
+        We could'nt find any blog.Try some different keywords or browse our <a href="{% url 'blogs' %}">blogs</a> 
+    </div>
     {% endif %} 
     
-
 {% endblock %}
