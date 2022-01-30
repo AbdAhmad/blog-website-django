@@ -17,12 +17,12 @@
 <nav class="navbar navbar-expand-lg bg-dark">
     <div class="container-fluid">
       <a href="{% url 'blogs' %}">
-        <span class="big-dot"></span> 
+        <div class="flex-box">
+          <div class="big-dot"></div> 
+          <div class="small-dot mt-1"></div>
+        </div>
       </a>
-      <a href="{% url 'blogs' %}">
-        <span class="small-dot"></span>
-      </a>
-         <h4 class="p-2"><a class="navbar-brand text-white" href="{% url 'blogs' %}">Blogs</a></h4>
+      <h4 class="p-1 mt-1"><a class="navbar-brand text-white" href="{% url 'blogs' %}">Blogs</a></h4>
       <button class="navbar-toggler navbar-dark" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -46,7 +46,7 @@
           <div class="dropdown dropstart">
             <a class="text-white mt-4 mx-3" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
               <div class='flex-box'>
-                <img src="{{ user.profile.profile_pic.url }}" width="20px" height="20px" style="border-radius: 50%;"/>
+                <img class="image-style" src="{{ user.profile.profile_pic.url }}" width="20px" height="20px"/>
                 <h6 class="px-2">{{ user.username }}</h6>
               </div>
             </a>

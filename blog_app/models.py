@@ -42,13 +42,13 @@ class Like(models.Model):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    full_name = models.CharField(max_length=100, blank=True, null=True)
-    email = models.EmailField(max_length=254, blank=True, null=True)
-    location = models.CharField(max_length=100, blank=True, null=True)
-    bio = models.TextField(blank=True, null=True)
+    full_name = models.CharField(max_length=100, default='N/A')
+    email = models.EmailField(max_length=254, default='N/A')
+    location = models.CharField(max_length=100, default='N/A')
+    bio = models.TextField(default='N/A')
     profile_pic = models.ImageField(upload_to='profile_pics', default='default.png')
     blogs = models.ManyToManyField(Blog, blank=True)
-    date_joined = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    date_joined = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.user.username

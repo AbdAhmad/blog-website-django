@@ -1,10 +1,9 @@
 from django.shortcuts import redirect, render
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import login, logout
 from django.contrib import messages
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 
-# Create your views here.
 
 def signup(request):
     if request.user.is_authenticated:
@@ -13,10 +12,7 @@ def signup(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
-            username = form.cleaned_data['username']
-            password1 = form.cleaned_data['password1']
             new_user = form.save()
-            new_user = authenticate(username=username,password=password1,)
             login(request, new_user)
             messages.success(request, "Thanks for registering. You are now logged in.")
             return redirect("blogs")

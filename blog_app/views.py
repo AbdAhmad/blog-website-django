@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from .models import Blog, Profile, Comment, Like
 from .forms import BlogForm, EditProfileForm, CommentForm
-from django.contrib import messages
-from django.contrib.auth.decorators import login_required
 from .utils import num_formatter
 
 

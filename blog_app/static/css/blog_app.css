@@ -50,6 +50,17 @@ pre {
     margin-left: 1%;
 }
 
+.image-style {
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.author-info {
+    font-size:18px; 
+    color: grey; 
+    font-style: italic;
+}
+
 /* Pagination Nav CSS */
 
 .page-link {

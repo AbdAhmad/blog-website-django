@@ -8,38 +8,38 @@
     <div class="col-md-12">         
         <div class="text-center">
             <h2>{{ user.username }}</h2>
+            <hr>
         </div>
-        <div class="row mt-5">
+        <div class="row mt-2">
             <div class="col text-center">
-                <img src="{{ profile.profile_pic.url }}" width="300px" height="300px" style="border-radius: 50%;" />
+                <img class="image-style" src="{{ profile.profile_pic.url }}" width="350px" height="350px"/>            
             </div>
             <div class="col">
-                <h4>{{ profile.full_name }}</h4>
-                <i class="fa fa-envelope" style="font-size:18px; color: grey; font-style: italic;"> {{ profile.email }}</i>
-                <i class="fa fa-map-marker mx-3" style="font-size:18px; color: grey; font-style: italic;"> {{ profile.location }}</i>
-                <hr>
-        {% if user.profile.location is not None or profile.bio is not None %}
-                
-            <i style="font-size:15px; color: grey">Bio</i>
-            <br>
-            <i style="font-size:18px;">"{{ profile.bio }}"</br>
-            <p class="published-date">Joined: {{ profile.date_joined|date:"M d, Y" }}</>
-        </div>
-        {% endif %}
-        </div>
-        <div class="p-3">
-            {% if is_authorized %}
-            <form action="{% url 'update_profile' profile.id %}">
-                <div class="d-grid gap-2">
-                    <button class="btn btn-outline-primary">Update Profile</button> 
+                <div class="text-center mt-2">
+                    <h4>{{ profile.full_name }}</h4>
+                    <p class="fa fa-envelope author-info"> {{ profile.email }}</>
+                    <p class="fa fa-map-marker mx-3 author-info"> {{ profile.location }}</>
                 </div>
-            </form>
-            {% endif %}
-            <form action="{% url 'author_posts' user.username %}">
-            <div class="d-grid gap-2 mt-1">
-                <button class="btn btn-outline-success">Blogs by {{ user.username }} : {{ posts_count }}</button> 
+                <hr>
+            <p class="published-date">Bio</h>
+            <br>
+            <i style="font-size:18px;">"{{ profile.bio }}"</i></br>
+            <p class="published-date">Joined: {{ profile.date_joined|date:"M d, Y" }}</p>
+        </div>
+        </div>
+        <div class="row mt-2">
+            {% if is_authorized %}
+            <div class="col">
+                <a href="{% url 'update_profile' profile.id %}">
+                    <button class="btn btn-outline-primary col-md-12">Update Profile</button> 
+                </a>
             </div>
-            </form>
+            {% endif %}
+            <div class="col">
+                <a href="{% url 'author_posts' user.username %}">
+                    <button class="btn btn-outline-success col-md-12">Blogs by {{ user.username }} : {{ posts_count }}</button> 
+                </a>
+            </div>
         </div>
     </div>
 
