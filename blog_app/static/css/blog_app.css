@@ -1,5 +1,5 @@
 .asteriskField {
-        display: none;
+    display: none;
 }
 
 .profile_pic {
@@ -11,14 +11,12 @@ pre {
     word-break: break-word;
 }
 
-.fa-heart-o {
-  color: red;
-  cursor: pointer;
+.fa-heart {
+  color: rgb(54, 48, 48);
 }
 
-.fa-heart {
-  color: red;
-  cursor: pointer;
+.fa-eye {
+  color:rgb(54, 48, 48);
 }
 
 .blog-title {
@@ -26,7 +24,7 @@ pre {
 }
 
 .blog-title:hover {
-    color: grey
+    color: black
 }
 
 .blog-content {
@@ -34,15 +32,12 @@ pre {
 }
 
 .blog-content:hover {
-    color: black
+    color: grey
 }
 
-.blog-created-div {
-    display: flex; 
-    flex-direction: row-reverse;
-}
 
-.profile_icon {
+
+.flex-box {
     display: flex;
 }
 
@@ -50,6 +45,10 @@ pre {
     color: grey; 
     font-style: italic; 
     font-size: 15px;
+}
+
+.fa-eye {
+    margin-left: 1%;
 }
 
 /* Pagination Nav CSS */

@@ -4,38 +4,50 @@
 
 {% block content %}  
  
-{% if blogs %} 
+    {% if blogs %} 
 
-    <div class="col-md-12"> 
-        <nav>
-            <ul class="pagination pagination-sm justify-content-center"> 
-                <li class="page-item {% if marked == 'latest' %} active {% endif %}"><a class="page-link" href="?q=latest">Latest</a>
-                <li class="page-item {% if marked == 'mostviewed' %} active {% endif %}"><a class="page-link" href="?q=mostviewed">Most Popular</a>
-            </ul>
-        </nav>
-        {% for blog in blogs %}   
-        <div class="mb-3">
-            <a href="{% url 'author' blog.author.username %}">
-                <img src="{{ blog.author.profile.profile_pic.url }}" width="20px" height="20px" style="border-radius: 50%;" />
-            </a>
-            <a class="mx-2" href="{% url 'author' blog.author.username %}"> {{ blog.author }}</a>
+        <div class="col-md-12">
+
+            {% if marked %}
+
+                <nav>
+                    <ul class="pagination pagination-sm justify-content-center"> 
+                        <li class="page-item {% if marked == 'latest' %} active {% endif %}"><a class="page-link" href="?q=latest">Latest</a>
+                        <li class="page-item {% if marked == 'most_popular' %} active {% endif %}"><a class="page-link" href="?q=most_popular">Most Popular</a>
+                    </ul>
+                </nav>
+
+            {% endif %}
+
+            {% for blog in blogs %}
+
+                <div class="mb-2 mt-3">
+                    <a href="{% url 'author' blog.author.username %}">
+                        <img src="{{ blog.author.profile.profile_pic.url }}" width="20px" height="20px" style="border-radius: 50%;" />
+                    </a>
+                    <a class="mx-2" href="{% url 'author' blog.author.username %}"> {{ blog.author }}</a>
+                </div>
+                <a href="{% url 'read_blog' blog.slug %}" class="blog-title"><h4>{{ blog.title }}</h4></a>
+                <a href="{% url 'read_blog' blog.slug %}" class="blog-content">{{ blog.content|slice:"290" }} {% if blog.content|length > 290 %}...{% endif %}</a>                       
+                <div class="mt-2">
+                    <a href="{% url 'like_blog' blog.slug %}">
+                        <p class="fa fa-heart" {% for like in blog.user_likes.all %} {% if like.user == request.user %} style="color: red;" {% endif %} {% endfor %}> {{blog.likes_count}}</p>
+                    </a>
+                    <p class="fa fa-eye" {% if blog.views >= 1000 %} style="color: #994C00;" {% endif %}> {{blog.formatted_views}}</p>
+                    <p class="published-date" style="float: right;">{{ blog.created_at|date:"M d, Y" }}</p>
+                </div>
+
+            {% endfor %}
+            
         </div>
-        <a href="{% url 'read_blog' blog.slug %}" class="blog-title"><h4>{{ blog.title }}</h4></a>
-        <a href="{% url 'read_blog' blog.slug %}" class="blog-content">{{ blog.content|slice:"290" }} {% if blog.content|length > 290 %}...{% endif %}</a>                       
-        <div>
-            <i class="fa fa-heart" style="color:rgb(184, 10, 10)"> {{blog.likes}}</i>
-            <i class="fa fa-eye" style="color:rgb(54, 48, 48)"> {{blog.views}}</i>
-        </div>
-        <div class="px-4 blog-created-div">
-            <p class="published-date">{{ blog.created_at|date:"M d, Y" }}</p>
-        </div>
-        {% endfor %}
-    </div>
+
     {% else %}
-    <div class="col-md-6 offset-md-3 text-center">
-        <h1>{{ searched_blogs }}</h1>
-        We could'nt find any blog.Try some different keywords or browse our <a href="{% url 'blogs' %}">blogs</a> 
-    </div>
+
+        <div class="col-md-6 offset-md-3 text-center">
+            <h1>{{ searched_blogs }}</h1>
+            We couldn't find any blog. Try some different keywords or browse our <a href="{% url 'blogs' %}">blogs</a> or <a href="{% url 'write_blog' %}">Publish one</a>
+        </div>
+
     {% endif %} 
     
 {% endblock %}

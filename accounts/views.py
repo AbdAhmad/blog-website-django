@@ -7,7 +7,7 @@ from django.contrib import messages
 
 def signup(request):
     if request.user.is_authenticated:
-        return redirect('/posts')
+        return redirect('blogs')
         
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
@@ -18,7 +18,7 @@ def signup(request):
             new_user = authenticate(username=username,password=password1,)
             login(request, new_user)
             messages.info(request, "Thanks for registering. You are now logged in.")
-            return redirect("posts")
+            return redirect("blogs")
         else:
             messages.error(request, 'Please provide valid credentials')
             return redirect('signup')
@@ -32,7 +32,7 @@ def signup(request):
 
 def login_user(request):
     if request.user.is_authenticated:
-        return redirect('/posts')
+        return redirect('blogs')
      
     if request.method == 'POST':
         username = request.POST['username']

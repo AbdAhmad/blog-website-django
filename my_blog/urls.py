@@ -24,3 +24,4 @@ urlpatterns = [
     path('', include('blog_app.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
+

@@ -1,19 +1,40 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
-from django.template import context
-from .forms import BlogForm, EditProfileForm, CommentForm
 from .models import Blog, Profile, Comment, Like
+from .forms import BlogForm, EditProfileForm, CommentForm
 from django.contrib import messages
-from django.views.generic.base import TemplateView
-from django.views import View
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic.list import ListView
-from django.views.generic.detail import DetailView
 from django.contrib.auth.decorators import login_required
+from .utils import num_formatter
 
 
-class Welcome(TemplateView):
-    template_name = 'blog_app/welcome.html'
+@login_required
+def blogs(request):
+    searched_blogs = None
+    blogs = Blog.objects.all()
+    for blog in blogs:
+        likes = Like.objects.filter(blog=blog).count()
+        blog.likes_count = likes
+        blog.formatted_views = num_formatter(blog.views)
+        blog.formatted_likes = num_formatter(likes)
+        blog.save()
+    if request.method == 'POST':
+        searched_blogs = request.POST['search']
+        blogs = Blog.objects.filter(title__icontains=searched_blogs)
+        marked = None
+    else:
+        if request.GET and ('q' in request.GET) and request.GET['q'] == 'latest':
+            blogs = Blog.objects.all().order_by('-created_at')
+            marked = 'latest'
+        else:
+            blogs = Blog.objects.all().order_by('-views')
+            marked = 'most_popular'
+    context = {
+        'blogs': blogs,
+        'marked': marked,
+        'page_title': 'Blogs',
+        'searched_blogs': searched_blogs
+    }
+    return render(request, 'blog_app/blogs.html', context)
 
 
 @login_required
@@ -39,10 +60,18 @@ def read_blog(request, slug):
     blog = Blog.objects.get(slug=slug)
     comments = Comment.objects.filter(blog=blog)
     blog.views = blog.views + 1
-    likes = Like.objects.filter(blog=blog).count()
-    blog.likes = likes
+    likes_count = Like.objects.filter(blog=blog).count()
+    blog.likes_count = likes_count
     blog.save()
     is_authorized = False
+    liked = False
+    try:
+        blog_likes = Like.objects.filter(blog=blog)
+        like = blog_likes.get(user=request.user)
+    except Like.DoesNotExist:
+        like = None
+    if like is not None:
+        liked = True
     if blog.author == request.user:
         is_authorized = True
     if request.method == 'POST':
@@ -59,7 +88,8 @@ def read_blog(request, slug):
         'blog': blog,
         'comment_form': comment_form,
         'comments': comments,
-        'is_authorized': is_authorized
+        'is_authorized': is_authorized,
+        'liked': liked
     }
     return render(request, 'blog_app/read_blog.html', context)
 
@@ -74,28 +104,13 @@ def update_blog(request, slug):
             blog.author = request.user
             blog.save()
             messages.success(request, 'Blog updated successfully')
-            return redirect('my_blog', slug=slug)           
-    else:
-        blog_form = BlogForm(instance=blog)
-    return render(request, 'blog_app/write_blog.html', {'blog_form': blog_form})
+            return redirect('my_blog', slug=blog.slug) 
 
-
-@login_required
-def blogs(request):
-    if request.GET and ('q' in request.GET) and request.GET['q'] == 'latest':
-        blogs = Blog.objects.all().order_by('-created_at')
-        marked = 'latest'
-    else:
-        blogs = Blog.objects.all().order_by('-views')
-        marked = 'mostviewed'
-    
+    blog_form = BlogForm(instance=blog)
     context = {
-        'blogs': blogs,
-        'marked': marked,
-        'page_title': 'Blogs'
+        'blog_form': blog_form
     }
-
-    return render(request, 'blog_app/blogs.html', context)
+    return render(request, 'blog_app/write_blog.html', context)
 
 
 @login_required
@@ -105,14 +120,13 @@ def my_blogs(request):
         marked = 'latest'
     else:
         blogs = Blog.objects.filter(author=request.user).order_by('-views')
-        marked = 'mostviewed'
+        marked = 'most_popular'
     
     context = {
         'blogs': blogs,
         'marked': marked,
         'page_title': 'My Blogs'
     }
-
     return render(request, 'blog_app/blogs.html', context)
 
 
@@ -125,13 +139,11 @@ def author_blogs(request, username):
     else:
         blogs = Blog.objects.filter(author=user).order_by('-views')
         marked = 'mostviewed'
-
     context = {
         'blogs': blogs,
         'marked': marked,
         'page_title': 'Author Blogs'
     }
-
     return render(request, 'blog_app/blogs.html', context)
 
  
@@ -143,20 +155,13 @@ def delete_blog(request, slug):
     return redirect('my_blogs')
 
 
-class MyBlog(LoginRequiredMixin, DetailView):
-    
-    model = Blog
-    template_name = 'blog_app/my_post.html'
-    context_object_name = 'blog'
-
-
 @login_required
 def my_blog(request, slug):
     blog = Blog.objects.get(slug=slug)
     comments = Comment.objects.filter(blog=blog)
     blog.views = blog.views + 1
-    likes = Like.objects.filter(blog=blog).count()
-    blog.likes = likes
+    likes_count = Like.objects.filter(blog=blog).count()
+    blog.likes_count = likes_count
     blog.save()
     is_authorized = False
     if blog.author == request.user:
@@ -180,54 +185,41 @@ def my_blog(request, slug):
     return render(request, 'blog_app/read_blog.html', context)
 
 
-class UpdateProfile(LoginRequiredMixin, View):
-
-    def get(self, request, *args, **kwargs):
-        profile = Profile.objects.get(id=kwargs['pk'])
-        form = EditProfileForm(instance=profile)
-        context = {'form': form, 'profile': profile}
-        return render(request, 'blog_app/update_profile.html', context)
-
-    def post(self, request, *args, **kwargs):
-        profile = Profile.objects.get(id=kwargs['pk'])
+@login_required
+def update_profile(request, pk):
+    if request.method == 'POST':
+        profile = Profile.objects.get(id=pk)
         form = EditProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
             form.save()
             messages.success(request, 'Profile updated successfully')
-            return redirect('author', pk=request.user)            
-        return render(request, 'blog_app/update_profile.html', {'form': form, 'profile': profile})
-
-
-class Author(LoginRequiredMixin, View):
-
-    def get(self, request, *args, **kwargs):
-        is_authorized = False
-        user = User.objects.get(username=kwargs['pk'])
-        if str(user.username) == str(request.user):
-            is_authorized = True
-        profile = Profile.objects.get(user=user)
-        posts = Blog.objects.filter(author=user)
-        posts_count = posts.count()
-        context = {
-            'profile': profile,
-            'posts_count': posts_count,
-            'user': user,
-            'is_authorized': is_authorized
+            return redirect('author', username=request.user)            
+    else:
+        profile = Profile.objects.get(id=pk)
+        form = EditProfileForm(instance=profile)
+    context = {
+        'form': form, 
+        'profile': profile
         }
-        return render(request, 'blog_app/author.html', context)
+    return render(request, 'blog_app/update_profile.html', context)
 
 
 @login_required
-def search_blogs(request):
-    if request.method == 'POST':
-        searched_blogs = request.POST['search_blogs']
-        print(searched_blogs)
-        blogs = Blog.objects.filter(title__icontains=searched_blogs)
-        context = {
-            'blogs': blogs,
-            'searched_blogs': searched_blogs
-        }
-        return render(request, 'blog_app/blogs.html', context)
+def author(request, username):
+    is_authorized = False
+    user = User.objects.get(username=username)
+    if str(user.username) == str(request.user):
+        is_authorized = True
+    profile = Profile.objects.get(user=user)
+    posts = Blog.objects.filter(author=user)
+    posts_count = posts.count()
+    context = {
+        'profile': profile,
+        'posts_count': posts_count,
+        'user': user,
+        'is_authorized': is_authorized
+    }
+    return render(request, 'blog_app/author.html', context)
 
 
 @login_required
@@ -242,9 +234,17 @@ def like_blog(request, slug):
 
     if like is not None:
         like.delete()
-        messages.success(request, 'You have unliked this blog')
+        messages.info(request, 'You have unliked this blog')
     else:
         like = Like(like=True, user=user, blog=blog)
         like.save()
+        blog.user_likes.add(like)
+        blog.save()
         messages.success(request, 'You have liked this post')
-    return redirect('read_blog', slug=slug)
+
+    if 'blogs' in request.META.get('HTTP_REFERER'):
+        return redirect('blogs')
+    elif 'read_blog' in request.META.get('HTTP_REFERER'):
+        return redirect('read_blog', slug=slug)
+
+    

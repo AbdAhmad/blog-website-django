@@ -27,7 +27,7 @@ SECRET_KEY = '8(&1-o-v+fo9o)i^d0&!rsyn==zl#o5k#@sx^tedl-eac^)5i@'
 DEBUG = True
 
 
-ALLOWED_HOSTS = ["blogspro.herokuapp.com", "localhost", "127.0.0.1"]
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -39,9 +39,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'blog_app.apps.BlogAppConfig',
+    'blog_app',
     'accounts',
-    'crispy_forms'
+    'crispy_forms',
+    'active_link'
 ]
 
 MIDDLEWARE = [
@@ -133,7 +134,7 @@ STATICFILES_DIRS = (
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-LOGIN_REDIRECT_URL = 'post'
+LOGIN_REDIRECT_URL = 'write_blog'
 
 LOGIN_URL = 'login'
 

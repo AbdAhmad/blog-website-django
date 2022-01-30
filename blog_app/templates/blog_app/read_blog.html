@@ -12,17 +12,20 @@
         <a class="mx-2" href="{% url 'author' blog.author.username %}"> {{ blog.author }}</a>
     </div>                    
         <h4>{{ blog.title }}</h4>    
-        <p class="published-date">{{ blog.created_at|date:"M d, Y" }}</>
+        <div style="display: flex;">
+            <p class="published-date">{{ blog.created_at|date:"M d, Y" }}</p>
+            <p class="fa fa-eye published-date mx-3 mt-1"> {{blog.views}}</p>
+        </div>
         <pre>{{ blog.content }}</pre>
-        <br>
         <div>
             <a href="{% url 'like_blog' blog.slug %}">
-                <i class="fa fa-heart mx-2" style="color:rgb(184, 10, 10)"> {{blog.likes}}</i>
+                <p class="fa fa-heart" {% if liked %} style="color: red;" {% endif %}> {{blog.likes_count}}</p>
             </a>
-            <i class="fa fa-eye" style="color:rgb(54, 48, 48)"> {{blog.views}}</i>
+            <p class="fa fa-eye mt-1"> {{blog.views}}</p>
+            <p class="published-date" style="float: right;">{{ blog.created_at|date:"M d, Y" }}</p>
         </div>
         {% if is_authorized %}
-        <div class="row p-2"> 
+        <div class="row py-2 mt-1">
             <div class="col">
                 <a href="{% url 'update_blog' blog.slug %}">
                     <button class="btn btn-outline-primary col-md-12">Edit</button>
@@ -50,13 +53,15 @@
         <pre>{{comment.comment}}</pre>
         {% endfor %}
         {% endif %}
-        <form method="POST">
-            {% csrf_token %}
-            {{ comment_form.comment|as_crispy_field }}
-            <div class="d-grid gap-2">
-                <button class="btn btn-outline-primary" type="submit">Add Comment</button>
-            </div>
-        </form>
+        <div class="mt-2">
+            <form method="POST">
+                {% csrf_token %}
+                {{ comment_form.comment|as_crispy_field }}
+                <div class="d-grid gap-2">
+                    <button class="btn btn-outline-primary" type="submit">Add Comment</button>
+                </div>
+            </form>
+        </div>
     </div>
 
 {% endblock %}
