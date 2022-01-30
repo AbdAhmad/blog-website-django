@@ -1,5 +1,6 @@
 from django.shortcuts import redirect, render
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 
@@ -17,11 +18,8 @@ def signup(request):
             new_user = form.save()
             new_user = authenticate(username=username,password=password1,)
             login(request, new_user)
-            messages.info(request, "Thanks for registering. You are now logged in.")
+            messages.success(request, "Thanks for registering. You are now logged in.")
             return redirect("blogs")
-        else:
-            messages.error(request, 'Please provide valid credentials')
-            return redirect('signup')
     else:
         form = UserCreationForm()
     context = {
@@ -37,14 +35,23 @@ def login_user(request):
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
-        user = authenticate(request, username=username, password=password)
+
+        try:
+            user = User.objects.get(username=username)
+        except User.DoesNotExist:
+            user = None
+
         if user is not None:
-            login(request, user)
-            messages.success(request, 'Welcome ' + username)
-            return redirect('blogs')
+            if user.check_password(password):
+                login(request, user)
+                messages.success(request, 'Welcome ' + username)
+                return redirect('blogs') 
+            else:
+                messages.error(request, 'Wrong password')
         else:
-            messages.error(request, 'Please provide valid credentials')
-            
+            messages.error(request, 'User does not exist')
+        return redirect('login')
+        
     form = AuthenticationForm()
     context = {
         'form': form
