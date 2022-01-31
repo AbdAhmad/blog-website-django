@@ -20,7 +20,7 @@
             {% endif %}
 
             {% for blog in blogs %}
-
+          
                 <div class="mb-2 mt-3">
                     <a href="{% url 'author' blog.author.username %}">
                         <img class="image-style" src="{{ blog.author.profile.profile_pic.url }}" width="20px" height="20px" />
