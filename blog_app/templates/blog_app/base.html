@@ -28,7 +28,7 @@
       </button>
       
       <div class="collapse justify-content-end navbar-collapse" id="navbarNavAltMarkup">
-        <div class="navbar-nav p-2">
+        <div class="navbar-nav">
        
           {% if user.is_authenticated %}
 
@@ -37,10 +37,10 @@
           <div class="search-container">
             <form action="{% url 'blogs' %}" method="POST" class=" mt-1">
               {% csrf_token %}
-              <input class="search expandright" id="searchright" type="search" name="search" placeholder="Search">
-              <label class="button searchbutton" for="searchright"><span class="mglass">&#9906;</span></label>
+              <input class="search" id="searchleft" type="search" name="search" placeholder="Search">
+              <label class="button searchbutton" for="searchleft"><span class="mglass">&#9906;</span></label>
             </form>
-          </div>         
+          </div>      
           <h6 ><a href="{% url 'write_blog' %}" class="nav-link mt-3" style="color: {% if 'write_blog' in request.path %}rgb(40, 151, 255);{% else %}white;{% endif %}">Start Writing</a></h6>
           <h6><a href="{% url 'my_blogs' %}" class="nav-link mt-3" style="color: {% if 'my_blogs' in request.path %}rgb(40, 151, 255);{% else %}white;{% endif %}">My Blogs</a></h6>
           <div class="dropdown dropstart">

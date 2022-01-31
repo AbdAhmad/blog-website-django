@@ -6,7 +6,6 @@
     border-radius: 50%;
 }
 
-
 pre {
     white-space: pre-wrap; 
     word-break: break-word;
@@ -35,7 +34,6 @@ pre {
 .blog-content:hover {
     color: grey
 }
-
 
 .flex-box {
     display: flex;
@@ -74,6 +72,7 @@ pre {
     background-color: #fff !important;
     
 }
+
 .page-link:hover {
         z-index: 2;
         color: #fff !important;
@@ -81,13 +80,13 @@ pre {
         background-color: #353535 !important;
         border-color: #353535;
 }
+
 .page-item.active .page-link {
     z-index: 3;
     color: #fff !important;
     background-color: #353535 !important;
     border-color: #353535;
 }
-
 
 /* Blogs Logo CSS */
 
@@ -97,107 +96,108 @@ pre {
     background-color: #fff;
     border-radius: 50%;
     display: inline-block;
-  }
-  .small-dot {
+}
+
+.small-dot {
     height: 20px;
     width: 20px;
     background-color: #fff;
     border-radius: 50%;
     display: inline-block;
-  }
+}
 
   /* Search bar CSS */
   
-  .button {
-      display: inline-block;
-      margin: 4px 2px;
-      font-size: 14px;
-      padding-left: 32px;
-      padding-right: 32px;
-      height: 50px;
-      line-height: 50px;
-      text-align: center;
-      color: white;
-      text-decoration: none;
-      cursor: pointer;
-      -moz-user-select: none;
-      -khtml-user-select: none;
-      -webkit-user-select: none;
-      -ms-user-select: none;
-      user-select: none;
-  }
+.button {
+    display: inline-block;
+    margin: 4px 2px;
+    font-size: 14px;
+    padding-left: 32px;
+    padding-right: 32px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    color: white;
+    text-decoration: none;
+    cursor: pointer;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
   
-  .button:hover {
-      transition-duration: 0.4s;
-      -moz-transition-duration: 0.4s;
-      -webkit-transition-duration: 0.4s;
-      -o-transition-duration: 0.4s;
-      background-color: white;
-      color: black;
-  }
+.button:hover {
+    transition-duration: 0.4s;
+    -moz-transition-duration: 0.4s;
+    -webkit-transition-duration: 0.4s;
+    -o-transition-duration: 0.4s;
+    background-color: white;
+    color: black;
+}
   
-  .search-container {
-      position: relative;
-      display: inline-block;
-      margin: 4px 2px;
-      height: 50px;
-      width: 50px;
-      vertical-align: bottom;
-  }
+.search-container {
+    position: relative;
+    display: inline-block;
+    margin: 4px 2px;
+    height: 50px;
+    width: 50px;
+    vertical-align: bottom;
+}
   
-  .mglass {
-      display: inline-block;
-      pointer-events: none;
-      -webkit-transform: rotate(-45deg);
-      -moz-transform: rotate(-45deg);
-      -o-transform: rotate(-45deg);
-      -ms-transform: rotate(-45deg);
-  }
+.mglass {
+    display: inline-block;
+    pointer-events: none;
+    -webkit-transform: rotate(-45deg);
+    -moz-transform: rotate(-45deg);
+    -o-transform: rotate(-45deg);
+    -ms-transform: rotate(-45deg);
+}
   
-  .searchbutton {
-      position: absolute;
-      font-size: 22px;
-      width: 100%;
-      margin: 0;
-      padding: 0;
-  }
+.searchbutton {
+    position: absolute;
+    font-size: 22px;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
   
-  .search:focus + .searchbutton {
-      transition-duration: 0.4s;
-      -moz-transition-duration: 0.4s;
-      -webkit-transition-duration: 0.4s;
-      -o-transition-duration: 0.4s;
-      background-color: white;
-      color: black;
-  }
+.search:focus + .searchbutton {
+    transition-duration: 0.4s;
+    -moz-transition-duration: 0.4s;
+    -webkit-transition-duration: 0.4s;
+    -o-transition-duration: 0.4s;
+    background-color: white;
+    color: black;
+}
   
-  .search {
-      position: absolute;
-      left: 49px; /* Button width-1px (Not 50px/100% because that will sometimes show a 1px line between the search box and button) */
-      background-color: white;
-      outline: none;
-      border: none;
-      padding: 0;
-      width: 0;
-      height: 100%;
-      z-index: 10;
-      transition-duration: 0.4s;
-      -moz-transition-duration: 0.4s;
-      -webkit-transition-duration: 0.4s;
-      -o-transition-duration: 0.4s;
-  }
+.search {
+    position: absolute;
+    left: 49px; /* Button width-1px (Not 50px/100% because that will sometimes show a 1px line between the search box and button) */
+    background-color: white;
+    outline: none;
+    border: none;
+    padding: 0;
+    width: 0;
+    height: 100%;
+    z-index: 10;
+    transition-duration: 0.4s;
+    -moz-transition-duration: 0.4s;
+    -webkit-transition-duration: 0.4s;
+    -o-transition-duration: 0.4s;
+}
   
-  .search:focus {
-      width: 363px; /* Bar width+1px */
-      padding: 0 16px 0 0;
-  }
+.search:focus {
+    width: 300px; /* Bar width+1px */
+    padding: 0 16px 0 0;
+}
   
-  .expandright {
-      left: auto;
-      right: 49px; /* Button width-1px */
-  }
+.expandright {
+    left: auto;
+    right: 49px; /* Button width-1px */
+}
   
-  .expandright:focus {
-      padding: 0 0 0 16px;
-  }
+.expandright:focus {
+    padding: 0 0 0 16px;
+}
 
