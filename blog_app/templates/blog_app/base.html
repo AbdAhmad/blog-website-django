@@ -41,13 +41,13 @@
               <label class="button searchbutton" for="searchright"><span class="mglass">&#9906;</span></label>
             </form>
           </div>         
-          <h6 ><a href="{% url 'write_blog' %}" class="nav-link mt-3" style="color: {% if 'write_blog' in request.path %}rgb(0, 132, 255);{% else %}white;{% endif %}">Start Writing</a></h6>
-          <h6><a href="{% url 'my_blogs' %}" class="nav-link mt-3" style="color: {% if 'my_blogs' in request.path %}rgb(0, 132, 255);{% else %}white;{% endif %}">My Blogs</a></h6>
+          <h6 ><a href="{% url 'write_blog' %}" class="nav-link mt-3" style="color: {% if 'write_blog' in request.path %}rgb(40, 151, 255);{% else %}white;{% endif %}">Start Writing</a></h6>
+          <h6><a href="{% url 'my_blogs' %}" class="nav-link mt-3" style="color: {% if 'my_blogs' in request.path %}rgb(40, 151, 255);{% else %}white;{% endif %}">My Blogs</a></h6>
           <div class="dropdown dropstart">
             <a class="text-white mt-4 mx-3" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
               <div class='flex-box'>
                 <img class="image-style" src="{{ user.profile.profile_pic.url }}" width="20px" height="20px"/>
-                <h6 class="px-2" style="color: {% if 'author' in request.path %}rgb(0, 132, 255);{% else %}white;{% endif %}">{{ user.username }}</h6>
+                <h6 class="px-2" style="color: {% if 'author' in request.path %}rgb(40, 151, 255);{% else %}white;{% endif %}">{{ user.username }}</h6>
               </div>
             </a>
             <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
@@ -56,8 +56,8 @@
             </ul>
           </div>
           {% else %}
-          <h6><a class="nav-link mt-3" href="{% url 'login' %}" style="color: {% if 'login' in request.path %}rgb(0, 132, 255);{% else %}white;{% endif %}">Log in</a></h6>
-          <h6><a class="nav-link mt-3" href="{% url 'signup' %}" style="color: {% if 'signup' in request.path %}rgb(0, 132, 255);{% else %}white;{% endif %}">Sign up</a></h6>
+          <h6><a class="nav-link mt-3" href="{% url 'login' %}" style="color: {% if 'login' in request.path %}rgb(40, 151, 255);{% else %}white;{% endif %}">Log in</a></h6>
+          <h6><a class="nav-link mt-3" href="{% url 'signup' %}" style="color: {% if 'signup' in request.path %}rgb(40, 151, 255);{% else %}white;{% endif %}">Sign up</a></h6>
           {% endif %}
         </url>
       </div>
