@@ -7,16 +7,23 @@ from .forms import BlogForm, EditProfileForm, CommentForm
 from .utils import num_formatter
 
 
+#########################################################################################################
+###################################### Blog views #######################################################
+#########################################################################################################
+
+
 @login_required
 def blogs(request):
     searched_blogs = None
     blogs = Blog.objects.all()
+
     for blog in blogs:
         likes = Like.objects.filter(blog=blog).count()
         blog.likes_count = likes
         blog.formatted_views = num_formatter(blog.views)
         blog.formatted_likes = num_formatter(likes)
         blog.save()
+
     if request.method == 'POST':
         searched_blogs = request.POST['search']
         blogs = Blog.objects.filter(title__icontains=searched_blogs)
@@ -28,6 +35,7 @@ def blogs(request):
         else:
             blogs = Blog.objects.all().order_by('-views')
             marked = 'most_popular'
+
     context = {
         'blogs': blogs,
         'marked': marked,
@@ -46,12 +54,11 @@ def create_blog(request):
             blog.author = request.user
             blog.save()
             messages.success(request, 'Blog created successfully')
-            return redirect('read_blog', slug=blog.slug)            
-    else:
-        blog_form = BlogForm()
-        context = {
-            'blog_form': blog_form
-            }
+            return redirect('read_blog', slug=blog.slug)     
+    blog_form = BlogForm()
+    context = {
+        'blog_form': blog_form
+        }
     return render(request, 'blog_app/write_blog.html', context)
 
 
@@ -65,15 +72,18 @@ def read_blog(request, slug):
     blog.save()
     is_authorized = False
     liked = False
+
     try:
         blog_likes = Like.objects.filter(blog=blog)
         like = blog_likes.get(user=request.user)
     except Like.DoesNotExist:
         like = None
+
     if like is not None:
         liked = True
     if blog.author == request.user:
         is_authorized = True
+
     if request.method == 'POST':
         comment_form = CommentForm(data=request.POST)
         if comment_form.is_valid():
@@ -114,6 +124,14 @@ def update_blog(request, slug):
 
 
 @login_required
+def delete_blog(request, slug):
+    blog = Blog.objects.get(slug=slug)
+    blog.delete()
+    messages.success(request, 'Blog Deleted')
+    return redirect('my_blogs')
+
+
+@login_required
 def my_blogs(request):
     if request.GET and ('q' in request.GET) and request.GET['q'] == 'latest':
         blogs = Blog.objects.filter(author=request.user).order_by('-created_at')
@@ -139,20 +157,13 @@ def author_blogs(request, username):
     else:
         blogs = Blog.objects.filter(author=user).order_by('-views')
         marked = 'mostviewed'
+
     context = {
         'blogs': blogs,
         'marked': marked,
         'page_title': 'Author Blogs'
     }
     return render(request, 'blog_app/blogs.html', context)
-
- 
-@login_required
-def delete_blog(request, slug):
-    blog = Blog.objects.get(slug=slug)
-    blog.delete()
-    messages.success(request, 'Blog Deleted')
-    return redirect('my_blogs')
 
 
 @login_required
@@ -176,6 +187,7 @@ def my_blog(request, slug):
             messages.success(request, 'Comment added')
         return redirect('read_blog', slug=blog.slug)
     comment_form = CommentForm()
+
     context = {
         'blog': blog,
         'comment_form': comment_form,
@@ -183,6 +195,11 @@ def my_blog(request, slug):
         'is_authorized': is_authorized
     }
     return render(request, 'blog_app/read_blog.html', context)
+
+
+#######################################################################################################
+################################## Profile views ######################################################
+#######################################################################################################
 
 
 @login_required
@@ -197,6 +214,7 @@ def update_profile(request, pk):
     else:
         profile = Profile.objects.get(id=pk)
         form = EditProfileForm(instance=profile)
+
     context = {
         'form': form, 
         'profile': profile
@@ -213,6 +231,7 @@ def author(request, username):
     profile = Profile.objects.get(user=user)
     posts = Blog.objects.filter(author=user)
     posts_count = posts.count()
+
     context = {
         'profile': profile,
         'posts_count': posts_count,
@@ -220,6 +239,11 @@ def author(request, username):
         'is_authorized': is_authorized
     }
     return render(request, 'blog_app/author.html', context)
+
+
+##########################################################################################################
+########################################### Like view ####################################################
+##########################################################################################################
 
 
 @login_required

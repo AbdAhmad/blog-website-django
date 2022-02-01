@@ -7,9 +7,12 @@
 
     <div class="col-md-12">
         <div class="text-center"><h3>Log in</h3></div>
-        <form method="post">
+        <form method="POST">
+
             {% csrf_token %}
+
             {{ form|crispy }}
+
             <div class="d-grid gap-2">
                 <button class="btn btn-outline-primary" type="submit">Log in</button>
             </div>

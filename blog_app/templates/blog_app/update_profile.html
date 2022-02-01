@@ -11,7 +11,9 @@
             <h3>{{ profile.user }}</h3>
         </div>
         <form method="post" enctype="multipart/form-data">
+
             {% csrf_token %}
+
                 {{ form.full_name|as_crispy_field }}
                 <br>
                 {{ form.email|as_crispy_field }}
@@ -22,6 +24,7 @@
                 <br>
                 {{ form.location|as_crispy_field }}
                 <br>
+                
             <div class="d-grid gap-2">
                 <button class="btn btn-outline-primary" type="submit">Update Profile</button>
             </div>

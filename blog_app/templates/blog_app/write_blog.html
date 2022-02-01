@@ -8,9 +8,11 @@
 
     <div class="col-md-12">
         <form method="POST">
+
             {% csrf_token %}
             {{ blog_form.title|as_crispy_field }}
             {{ blog_form.content|as_crispy_field }}  
+            
         <div class="d-grid gap-2">
             <button class="btn btn-outline-success" type="submit">Publish</button> 
         </div>

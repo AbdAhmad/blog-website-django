@@ -6,27 +6,38 @@
 {% block content %}
 
     {% if form.errors %}
+
     <div class="text-center" id="signup-errors">
+
         {% for field in form %}
             {% for error in field.errors %}
+
                 <div class="alert alert-danger">
                     <div>{{ error|escape }}</div>
                 </div>
+
             {% endfor %}
         {% endfor %}
+
         {% for error in form.non_field_errors %}
+
             <div class="alert alert-danger">
                 <div>{{ error|escape }}</div>
             </div>
+
         {% endfor %}
+
     </div>
+
     {% endif %}
 
     <div class="col-md-12">
         <div class="text-center"><h3>Sign up</h3></div>
         <form autocomplete="off" method="POST">
+
             {% csrf_token %}
             {{ form|crispy }}
+            
             <div class="d-grid gap-2">
                 <button class="btn btn-outline-success" type="submit">Sign up</button>
             </div>

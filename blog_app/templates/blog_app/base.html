@@ -68,19 +68,31 @@
 <body>
 
   <div class="container">
+
     {% if messages %}
+
       <div id="message_container" class="messages">
+
           {% for message in messages %}
+
             <div class="alert {{ message.tags }} alert-dismissible text-center" role="alert">
+
               {{ message }}
+
             </div>
+
           {% endfor %}
+
       </div>
+
     {% endif %}
-    <div class="row">
-      {% block content %}
-      {% endblock %}
-    </div>
+
+      <div class="row">
+
+        {% block content %}
+        {% endblock %}
+
+      </div>
   </div>
   <script src="{% static 'js/main.js' %}"></script>
 </body>

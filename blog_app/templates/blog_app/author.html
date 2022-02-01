@@ -28,13 +28,17 @@
         </div>
         </div>
         <div class="row mt-2">
+
             {% if is_authorized %}
+            
             <div class="col">
                 <a href="{% url 'update_profile' profile.id %}">
                     <button class="btn btn-outline-primary col-md-12">Update Profile</button> 
                 </a>
             </div>
+
             {% endif %}
+
             <div class="col">
                 <a href="{% url 'author_posts' user.username %}">
                     <button class="btn btn-outline-success col-md-12">Blogs by {{ user.username }} : {{ posts_count }}</button> 

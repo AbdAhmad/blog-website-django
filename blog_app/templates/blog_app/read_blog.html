@@ -12,7 +12,7 @@
         <a class="mx-2" href="{% url 'author' blog.author.username %}"> {{ blog.author }}</a>
     </div>                    
         <h4>{{ blog.title }}</h4>    
-        <div style="display: flex;">
+        <div class="flex-box">
             <p class="published-date">{{ blog.created_at|date:"M d, Y" }}</p>
             <p class="fa fa-eye published-date mx-3 mt-1"> {{blog.views}}</p>
         </div>
@@ -24,7 +24,9 @@
             <p class="fa fa-eye mt-1"> {{blog.views}}</p>
             <p class="published-date" style="float: right;">{{ blog.created_at|date:"M d, Y" }}</p>
         </div>
+
         {% if is_authorized %}
+
         <div class="row py-2 mt-1">
             <div class="col">
                 <a href="{% url 'update_blog' blog.slug %}">
@@ -37,26 +39,36 @@
                 </a>
             </div>
         </div>
+
         {% endif %}
+
         {% if comments %}
-        <div class="my-3">
-            <h4>{{ comments|length }}{% if comments|length == 1 %} Comment {% else %} Comments {% endif %}</h4>
-        </div>
-        {% for comment in comments %}
-        <div class="profile_icon mb-1">
-            <a href="{% url 'author' comment.user.username %}">
-                <img src="{{ comment.user.profile.profile_pic.url }}" width="20px" height="20px" style="border-radius: 50%;" />
-            </a>
-            <a class="mx-2" href="{% url 'author' comment.user.username %}"> {{comment.user}}</a>
-            <p class="published-date px-2">{{ comment.created_at|date:"M d, Y" }}</p>
-        </div>
-        <pre>{{comment.comment}}</pre>
-        {% endfor %}
+
+            <div class="my-3">
+                <h4>{{ comments|length }}{% if comments|length == 1 %} Comment {% else %} Comments {% endif %}</h4>
+            </div>
+
+            {% for comment in comments %}
+
+                <div class="profile_icon mb-1">
+                    <a href="{% url 'author' comment.user.username %}">
+                        <img src="{{ comment.user.profile.profile_pic.url }}" width="20px" height="20px" style="border-radius: 50%;" />
+                    </a>
+                    <a class="mx-2" href="{% url 'author' comment.user.username %}"> {{comment.user}}</a>
+                    <p class="published-date px-2">{{ comment.created_at|date:"M d, Y" }}</p>
+                </div>
+                <pre>{{comment.comment}}</pre>
+
+            {% endfor %}
+
         {% endif %}
+
         <div class="mt-2">
             <form method="POST">
+
                 {% csrf_token %}
                 {{ comment_form.comment|as_crispy_field }}
+
                 <div class="d-grid gap-2">
                     <button class="btn btn-outline-primary" type="submit">Add Comment</button>
                 </div>
