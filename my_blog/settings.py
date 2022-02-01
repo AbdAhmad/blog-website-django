@@ -26,9 +26,7 @@ SECRET_KEY = '8(&1-o-v+fo9o)i^d0&!rsyn==zl#o5k#@sx^tedl-eac^)5i@'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -124,7 +122,6 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 STATICFILES_DIRS = (
@@ -132,8 +129,6 @@ STATICFILES_DIRS = (
 )
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
-LOGIN_REDIRECT_URL = 'write_blog'
 
 LOGIN_URL = 'login'
 
