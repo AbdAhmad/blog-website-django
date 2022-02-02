@@ -156,7 +156,7 @@ def author_blogs(request, username):
         marked = 'latest'
     else:
         blogs = Blog.objects.filter(author=user).order_by('-views')
-        marked = 'mostviewed'
+        marked = 'most_popular'
 
     context = {
         'blogs': blogs,

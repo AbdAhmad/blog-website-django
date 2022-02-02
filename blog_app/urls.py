@@ -19,5 +19,5 @@ urlpatterns = [
     
     path('author/<str:username>/', views.author, name='author'),
     path('update_profile/<int:pk>/', views.update_profile, name='update_profile'),
-    path('author_blogs/<str:username>/', views.author_blogs, name="author_posts")
+    path('author_blogs/<str:username>/', views.author_blogs, name="author_blogs")
 ]

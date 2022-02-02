@@ -40,7 +40,7 @@
             {% endif %}
 
             <div class="col">
-                <a href="{% url 'author_posts' user.username %}">
+                <a href="{% url 'author_blogs' user.username %}">
                     <button class="btn btn-outline-success col-md-12">Blogs by {{ user.username }} : {{ posts_count }}</button> 
                 </a>
             </div>
