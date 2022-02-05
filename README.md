@@ -1,21 +1,19 @@
 # A Blog Website
 
-The aim of this project was to create a standard blog website with all the necessary features.
+The aim of this project was to create a standard blog website with all the core features.
 
 ## Features
-* Sign up, Log in and Log out
+* User Registration and Authentication
+* Write Blogs
+* Read Blogs
+* Comment and Like functionality
 * User Profile
-* Post Blog
-* Read Blog
-* Edit and Delete your own Blog
-* Search Blog
 
-### This project was hosted on heroku : [Visit](http://blogspro.herokuapp.com/)
+### This project was hosted on PythonAnywhere : [Visit](https://abdulla8.pythonanywhere.com/)
 
 ## Tech Stack
 * Frontend : HTML, CSS, Bootstrap and JavaScript
 * Backend : Python, Django
-* Database : SQLite
 
 ## Preview
 
@@ -34,11 +32,11 @@ A step by step series of examples that tell you how to get a development env run
 In your cmd or terminal:
 
 ```bash
-git clone https://github.com/AbdAhmad/blog-django.git
+git clone https://github.com/AbdAhmad/blog-website-django.git
 ```
 
 Then,
-* cd blog-django
+* cd blog-website-django
 * pip install -r requirements.txt
 * python manage.py makemigrations
 * python manage.py migrate
@@ -51,6 +49,6 @@ You are done with the setup now!
 * [Django](https://docs.djangoproject.com/en/3.2/)
 * [Javascript](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
 * [Stackoverflow](https://stackoverflow.com/)
-* [Heroku](https://www.heroku.com/)
+* [PythonAnywhere](https://www.pythonanywhere.com/)
 
 ## Developed by [Abdulla Ahmad](https://github.com/AbdAhmad)
