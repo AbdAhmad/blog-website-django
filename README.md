@@ -19,22 +19,14 @@ The aim of this project was to create a standard blog website with all the neces
 
 ## Preview
 
-### Wecome page
-![Welcome](https://user-images.githubusercontent.com/49855656/141513961-73599819-0966-458f-b81c-450c60ef3914.png)
-
-### Sign up page
-![Signup](https://user-images.githubusercontent.com/49855656/141513909-649454bc-5330-4f18-b70c-87fe921c10d6.png)
-
 ### Blogs page
-![Blogs](https://user-images.githubusercontent.com/49855656/141513813-92ef7aeb-b71c-4589-a0c6-b2b068321ee0.png)
+![WhatsApp Image 2022-02-02 at 1 09 25 PM (6)](https://user-images.githubusercontent.com/49855656/152631154-2abdf2d4-a47a-4862-8061-d2a35aceea40.jpeg)
 
 ### Read Blog page
-![Read_blog](https://user-images.githubusercontent.com/49855656/141513890-fe0856dc-20f1-4955-9c7e-bf1397f46348.png)
-
+![WhatsApp Image 2022-02-02 at 1 09 25 PM (7)](https://user-images.githubusercontent.com/49855656/152631161-ad42ab01-20de-444e-a4c0-7af36b5579cd.jpeg)
 
 ### Profile page
-![Profile](https://user-images.githubusercontent.com/49855656/141513831-3632a754-e200-4976-ad5c-b733a860927b.png)
-
+![WhatsApp Image 2022-02-02 at 1 09 25 PM (5)](https://user-images.githubusercontent.com/49855656/152631162-0d4cf5d8-966c-408b-b9ef-7c5bbf0b3175.jpeg)
 
 ## Installation Guide
 A step by step series of examples that tell you how to get a development env running
